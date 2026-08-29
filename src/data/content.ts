@@ -1,4 +1,4 @@
-export type Item = { id: string; title: string; hint: string; learn?: boolean };
+export type Item = { id: string; title: string; hint: string; learn: boolean };
 export type Group = { id: string; name: string; emoji: string; blurb: string; items: Item[] };
 
 function g(id: string, name: string, emoji: string, blurb: string, rows: [string, string, boolean?][]): Group {
@@ -7,7 +7,7 @@ function g(id: string, name: string, emoji: string, blurb: string, rows: [string
     name,
     emoji,
     blurb,
-    items: rows.map(([title, hint, learn], i) => ({ id: `${id}-${i + 1}`, title, hint, learn })),
+    items: rows.map(([title, hint, learn], i) => ({ id: `${id}-${i + 1}`, title, hint, learn: !!learn })),
   };
 }
 

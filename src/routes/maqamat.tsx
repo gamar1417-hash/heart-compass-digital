@@ -22,7 +22,7 @@ export const Route = createFileRoute("/maqamat")({
 function Maqamat() {
   const { today, add } = useDayLog();
   const [q, setQ] = useState("");
-  const [openGroup, setOpenGroup] = useState<string | null>(groups[0].id);
+  const [openGroup, setOpenGroup] = useState<string | null>(groups[0]?.id ?? null);
   const [detail, setDetail] = useState<Item | null>(null);
 
   const results = useMemo(() => {
