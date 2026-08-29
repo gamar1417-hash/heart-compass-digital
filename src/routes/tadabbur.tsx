@@ -21,7 +21,7 @@ export const Route = createFileRoute("/tadabbur")({
 function Tadabbur() {
   const [fav, setFav] = useLocalState<string[]>("fav-ayat", []);
   const [note, setNote] = useLocalState("tadabbur-note", "");
-  const todayAya = ayat[new Date().getDate() % ayat.length];
+  const todayAya = ayat[new Date().getDate() % ayat.length]!;
 
   return (
     <div className="space-y-4">

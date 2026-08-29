@@ -36,7 +36,7 @@ const quick = [
 function Home() {
   const [accepted, setAccepted] = useLocalState("welcomed", false);
   const { total, streak } = useDayLog();
-  const aya = ayat[new Date().getDate() % ayat.length];
+  const aya = ayat[new Date().getDate() % ayat.length]!;
 
   if (!accepted) {
     return (
