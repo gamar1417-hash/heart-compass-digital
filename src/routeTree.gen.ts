@@ -10,33 +10,167 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DeedsRouteImport } from './routes/deeds'
+import { Route as FarmRouteImport } from './routes/farm'
+import { Route as FeedbackRouteImport } from './routes/feedback'
+import { Route as MaqamatRouteImport } from './routes/maqamat'
+import { Route as MercyRouteImport } from './routes/mercy'
+import { Route as PrayerRouteImport } from './routes/prayer'
+import { Route as SabrRouteImport } from './routes/sabr'
+import { Route as SectionsRouteImport } from './routes/sections'
+import { Route as TadabburRouteImport } from './routes/tadabbur'
+import { Route as TawbahRouteImport } from './routes/tawbah'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DeedsRoute = DeedsRouteImport.update({
+  id: '/deeds',
+  path: '/deeds',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FarmRoute = FarmRouteImport.update({
+  id: '/farm',
+  path: '/farm',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeedbackRoute = FeedbackRouteImport.update({
+  id: '/feedback',
+  path: '/feedback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MaqamatRoute = MaqamatRouteImport.update({
+  id: '/maqamat',
+  path: '/maqamat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MercyRoute = MercyRouteImport.update({
+  id: '/mercy',
+  path: '/mercy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrayerRoute = PrayerRouteImport.update({
+  id: '/prayer',
+  path: '/prayer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SabrRoute = SabrRouteImport.update({
+  id: '/sabr',
+  path: '/sabr',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SectionsRoute = SectionsRouteImport.update({
+  id: '/sections',
+  path: '/sections',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TadabburRoute = TadabburRouteImport.update({
+  id: '/tadabbur',
+  path: '/tadabbur',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TawbahRoute = TawbahRouteImport.update({
+  id: '/tawbah',
+  path: '/tawbah',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/deeds': typeof DeedsRoute
+  '/farm': typeof FarmRoute
+  '/feedback': typeof FeedbackRoute
+  '/maqamat': typeof MaqamatRoute
+  '/mercy': typeof MercyRoute
+  '/prayer': typeof PrayerRoute
+  '/sabr': typeof SabrRoute
+  '/sections': typeof SectionsRoute
+  '/tadabbur': typeof TadabburRoute
+  '/tawbah': typeof TawbahRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/deeds': typeof DeedsRoute
+  '/farm': typeof FarmRoute
+  '/feedback': typeof FeedbackRoute
+  '/maqamat': typeof MaqamatRoute
+  '/mercy': typeof MercyRoute
+  '/prayer': typeof PrayerRoute
+  '/sabr': typeof SabrRoute
+  '/sections': typeof SectionsRoute
+  '/tadabbur': typeof TadabburRoute
+  '/tawbah': typeof TawbahRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/deeds': typeof DeedsRoute
+  '/farm': typeof FarmRoute
+  '/feedback': typeof FeedbackRoute
+  '/maqamat': typeof MaqamatRoute
+  '/mercy': typeof MercyRoute
+  '/prayer': typeof PrayerRoute
+  '/sabr': typeof SabrRoute
+  '/sections': typeof SectionsRoute
+  '/tadabbur': typeof TadabburRoute
+  '/tawbah': typeof TawbahRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/deeds'
+    | '/farm'
+    | '/feedback'
+    | '/maqamat'
+    | '/mercy'
+    | '/prayer'
+    | '/sabr'
+    | '/sections'
+    | '/tadabbur'
+    | '/tawbah'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/deeds'
+    | '/farm'
+    | '/feedback'
+    | '/maqamat'
+    | '/mercy'
+    | '/prayer'
+    | '/sabr'
+    | '/sections'
+    | '/tadabbur'
+    | '/tawbah'
+  id:
+    | '__root__'
+    | '/'
+    | '/deeds'
+    | '/farm'
+    | '/feedback'
+    | '/maqamat'
+    | '/mercy'
+    | '/prayer'
+    | '/sabr'
+    | '/sections'
+    | '/tadabbur'
+    | '/tawbah'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DeedsRoute: typeof DeedsRoute
+  FarmRoute: typeof FarmRoute
+  FeedbackRoute: typeof FeedbackRoute
+  MaqamatRoute: typeof MaqamatRoute
+  MercyRoute: typeof MercyRoute
+  PrayerRoute: typeof PrayerRoute
+  SabrRoute: typeof SabrRoute
+  SectionsRoute: typeof SectionsRoute
+  TadabburRoute: typeof TadabburRoute
+  TawbahRoute: typeof TawbahRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +182,91 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/deeds': {
+      id: '/deeds'
+      path: '/deeds'
+      fullPath: '/deeds'
+      preLoaderRoute: typeof DeedsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/farm': {
+      id: '/farm'
+      path: '/farm'
+      fullPath: '/farm'
+      preLoaderRoute: typeof FarmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/feedback': {
+      id: '/feedback'
+      path: '/feedback'
+      fullPath: '/feedback'
+      preLoaderRoute: typeof FeedbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/maqamat': {
+      id: '/maqamat'
+      path: '/maqamat'
+      fullPath: '/maqamat'
+      preLoaderRoute: typeof MaqamatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mercy': {
+      id: '/mercy'
+      path: '/mercy'
+      fullPath: '/mercy'
+      preLoaderRoute: typeof MercyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prayer': {
+      id: '/prayer'
+      path: '/prayer'
+      fullPath: '/prayer'
+      preLoaderRoute: typeof PrayerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sabr': {
+      id: '/sabr'
+      path: '/sabr'
+      fullPath: '/sabr'
+      preLoaderRoute: typeof SabrRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sections': {
+      id: '/sections'
+      path: '/sections'
+      fullPath: '/sections'
+      preLoaderRoute: typeof SectionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tadabbur': {
+      id: '/tadabbur'
+      path: '/tadabbur'
+      fullPath: '/tadabbur'
+      preLoaderRoute: typeof TadabburRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tawbah': {
+      id: '/tawbah'
+      path: '/tawbah'
+      fullPath: '/tawbah'
+      preLoaderRoute: typeof TawbahRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DeedsRoute: DeedsRoute,
+  FarmRoute: FarmRoute,
+  FeedbackRoute: FeedbackRoute,
+  MaqamatRoute: MaqamatRoute,
+  MercyRoute: MercyRoute,
+  PrayerRoute: PrayerRoute,
+  SabrRoute: SabrRoute,
+  SectionsRoute: SectionsRoute,
+  TadabburRoute: TadabburRoute,
+  TawbahRoute: TawbahRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
