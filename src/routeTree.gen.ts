@@ -10,33 +10,73 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DeedsRouteImport } from './routes/deeds'
+import { Route as FarmRouteImport } from './routes/farm'
+import { Route as PrayerRouteImport } from './routes/prayer'
+import { Route as TadabburRouteImport } from './routes/tadabbur'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DeedsRoute = DeedsRouteImport.update({
+  id: '/deeds',
+  path: '/deeds',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FarmRoute = FarmRouteImport.update({
+  id: '/farm',
+  path: '/farm',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrayerRoute = PrayerRouteImport.update({
+  id: '/prayer',
+  path: '/prayer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TadabburRoute = TadabburRouteImport.update({
+  id: '/tadabbur',
+  path: '/tadabbur',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/deeds': typeof DeedsRoute
+  '/farm': typeof FarmRoute
+  '/prayer': typeof PrayerRoute
+  '/tadabbur': typeof TadabburRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/deeds': typeof DeedsRoute
+  '/farm': typeof FarmRoute
+  '/prayer': typeof PrayerRoute
+  '/tadabbur': typeof TadabburRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/deeds': typeof DeedsRoute
+  '/farm': typeof FarmRoute
+  '/prayer': typeof PrayerRoute
+  '/tadabbur': typeof TadabburRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/deeds' | '/farm' | '/prayer' | '/tadabbur'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/deeds' | '/farm' | '/prayer' | '/tadabbur'
+  id: '__root__' | '/' | '/deeds' | '/farm' | '/prayer' | '/tadabbur'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DeedsRoute: typeof DeedsRoute
+  FarmRoute: typeof FarmRoute
+  PrayerRoute: typeof PrayerRoute
+  TadabburRoute: typeof TadabburRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +88,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/deeds': {
+      id: '/deeds'
+      path: '/deeds'
+      fullPath: '/deeds'
+      preLoaderRoute: typeof DeedsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/farm': {
+      id: '/farm'
+      path: '/farm'
+      fullPath: '/farm'
+      preLoaderRoute: typeof FarmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prayer': {
+      id: '/prayer'
+      path: '/prayer'
+      fullPath: '/prayer'
+      preLoaderRoute: typeof PrayerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tadabbur': {
+      id: '/tadabbur'
+      path: '/tadabbur'
+      fullPath: '/tadabbur'
+      preLoaderRoute: typeof TadabburRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DeedsRoute: DeedsRoute,
+  FarmRoute: FarmRoute,
+  PrayerRoute: PrayerRoute,
+  TadabburRoute: TadabburRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
