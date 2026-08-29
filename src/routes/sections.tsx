@@ -15,7 +15,7 @@ export const Route = createFileRoute("/sections")({
       { property: "og:description", content: "نيّة وخطة يومية وتذكير وملاحظات خاصة لكل مسار." },
     ],
   }),
-  component: Sections;
+  component: Sections,
 });
 
 type S = { id: string; t: string; icon: string; intent: string; plan: string[]; remind: string };
