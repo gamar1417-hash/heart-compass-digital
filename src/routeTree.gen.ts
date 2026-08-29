@@ -13,9 +13,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DeedsRouteImport } from './routes/deeds'
 import { Route as FarmRouteImport } from './routes/farm'
 import { Route as FeedbackRouteImport } from './routes/feedback'
+import { Route as MaqamatRouteImport } from './routes/maqamat'
 import { Route as MercyRouteImport } from './routes/mercy'
 import { Route as PrayerRouteImport } from './routes/prayer'
 import { Route as SabrRouteImport } from './routes/sabr'
+import { Route as SectionsRouteImport } from './routes/sections'
 import { Route as TadabburRouteImport } from './routes/tadabbur'
 import { Route as TawbahRouteImport } from './routes/tawbah'
 
@@ -39,6 +41,11 @@ const FeedbackRoute = FeedbackRouteImport.update({
   path: '/feedback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MaqamatRoute = MaqamatRouteImport.update({
+  id: '/maqamat',
+  path: '/maqamat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MercyRoute = MercyRouteImport.update({
   id: '/mercy',
   path: '/mercy',
@@ -52,6 +59,11 @@ const PrayerRoute = PrayerRouteImport.update({
 const SabrRoute = SabrRouteImport.update({
   id: '/sabr',
   path: '/sabr',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SectionsRoute = SectionsRouteImport.update({
+  id: '/sections',
+  path: '/sections',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TadabburRoute = TadabburRouteImport.update({
@@ -70,9 +82,11 @@ export interface FileRoutesByFullPath {
   '/deeds': typeof DeedsRoute
   '/farm': typeof FarmRoute
   '/feedback': typeof FeedbackRoute
+  '/maqamat': typeof MaqamatRoute
   '/mercy': typeof MercyRoute
   '/prayer': typeof PrayerRoute
   '/sabr': typeof SabrRoute
+  '/sections': typeof SectionsRoute
   '/tadabbur': typeof TadabburRoute
   '/tawbah': typeof TawbahRoute
 }
@@ -81,9 +95,11 @@ export interface FileRoutesByTo {
   '/deeds': typeof DeedsRoute
   '/farm': typeof FarmRoute
   '/feedback': typeof FeedbackRoute
+  '/maqamat': typeof MaqamatRoute
   '/mercy': typeof MercyRoute
   '/prayer': typeof PrayerRoute
   '/sabr': typeof SabrRoute
+  '/sections': typeof SectionsRoute
   '/tadabbur': typeof TadabburRoute
   '/tawbah': typeof TawbahRoute
 }
@@ -93,9 +109,11 @@ export interface FileRoutesById {
   '/deeds': typeof DeedsRoute
   '/farm': typeof FarmRoute
   '/feedback': typeof FeedbackRoute
+  '/maqamat': typeof MaqamatRoute
   '/mercy': typeof MercyRoute
   '/prayer': typeof PrayerRoute
   '/sabr': typeof SabrRoute
+  '/sections': typeof SectionsRoute
   '/tadabbur': typeof TadabburRoute
   '/tawbah': typeof TawbahRoute
 }
@@ -106,9 +124,11 @@ export interface FileRouteTypes {
     | '/deeds'
     | '/farm'
     | '/feedback'
+    | '/maqamat'
     | '/mercy'
     | '/prayer'
     | '/sabr'
+    | '/sections'
     | '/tadabbur'
     | '/tawbah'
   fileRoutesByTo: FileRoutesByTo
@@ -117,9 +137,11 @@ export interface FileRouteTypes {
     | '/deeds'
     | '/farm'
     | '/feedback'
+    | '/maqamat'
     | '/mercy'
     | '/prayer'
     | '/sabr'
+    | '/sections'
     | '/tadabbur'
     | '/tawbah'
   id:
@@ -128,9 +150,11 @@ export interface FileRouteTypes {
     | '/deeds'
     | '/farm'
     | '/feedback'
+    | '/maqamat'
     | '/mercy'
     | '/prayer'
     | '/sabr'
+    | '/sections'
     | '/tadabbur'
     | '/tawbah'
   fileRoutesById: FileRoutesById
@@ -140,9 +164,11 @@ export interface RootRouteChildren {
   DeedsRoute: typeof DeedsRoute
   FarmRoute: typeof FarmRoute
   FeedbackRoute: typeof FeedbackRoute
+  MaqamatRoute: typeof MaqamatRoute
   MercyRoute: typeof MercyRoute
   PrayerRoute: typeof PrayerRoute
   SabrRoute: typeof SabrRoute
+  SectionsRoute: typeof SectionsRoute
   TadabburRoute: typeof TadabburRoute
   TawbahRoute: typeof TawbahRoute
 }
@@ -177,6 +203,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeedbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/maqamat': {
+      id: '/maqamat'
+      path: '/maqamat'
+      fullPath: '/maqamat'
+      preLoaderRoute: typeof MaqamatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mercy': {
       id: '/mercy'
       path: '/mercy'
@@ -196,6 +229,13 @@ declare module '@tanstack/react-router' {
       path: '/sabr'
       fullPath: '/sabr'
       preLoaderRoute: typeof SabrRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sections': {
+      id: '/sections'
+      path: '/sections'
+      fullPath: '/sections'
+      preLoaderRoute: typeof SectionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tadabbur': {
@@ -220,9 +260,11 @@ const rootRouteChildren: RootRouteChildren = {
   DeedsRoute: DeedsRoute,
   FarmRoute: FarmRoute,
   FeedbackRoute: FeedbackRoute,
+  MaqamatRoute: MaqamatRoute,
   MercyRoute: MercyRoute,
   PrayerRoute: PrayerRoute,
   SabrRoute: SabrRoute,
+  SectionsRoute: SectionsRoute,
   TadabburRoute: TadabburRoute,
   TawbahRoute: TawbahRoute,
 }
