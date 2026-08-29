@@ -149,5 +149,59 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    background-image: radial-gradient(oklch(0.46 0.09 155 / 0.05) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
   }
 }
+
+@utility soft-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-soft);
+}
+
+@utility garden-sky {
+  background: var(--gradient-garden);
+}
+
+@keyframes drop-fall {
+  0% {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(90px);
+    opacity: 0;
+  }
+}
+
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+
+@utility animate-drop {
+  animation: drop-fall 2.6s ease-in infinite;
+}
+
+@utility animate-sway {
+  animation: sway 5s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
