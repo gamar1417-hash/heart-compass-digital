@@ -71,5 +71,12 @@ export function useDayLog() {
     return n;
   })();
 
-  return { today, add, total, streak, logs };
+  // مجاميع تراكمية لا تنتهي بنهاية اليوم
+  const lifetimeById: Record<string, number> = {};
+  for (const d of Object.values(logs)) {
+    for (const [k, v] of Object.entries(d)) lifetimeById[k] = (lifetimeById[k] ?? 0) + v;
+  }
+  const lifetimeTotal = Object.values(lifetimeById).reduce((a, b) => a + b, 0);
+
+  return { today, add, total, streak, logs, lifetimeById, lifetimeTotal };
 }

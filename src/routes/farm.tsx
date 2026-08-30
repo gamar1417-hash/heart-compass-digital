@@ -1,17 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { Btn, Card, Note, PageTitle, ShareReminder } from "@/components/bits";
+import { ParadiseScene, paradiseCounts } from "@/components/paradise";
 import { useDayLog } from "@/lib/store";
 
 export const Route = createFileRoute("/farm")({
   head: () => ({
     meta: [
-      { title: "مزرعة وغراس الجنة — تمثيل تحفيزي رمزي" },
+      { title: "جنة الغراس — مشهد تراكمي رمزي" },
       {
         name: "description",
-        content: "مشهد أخضر رمزي ينمو مع مداومتك على السنن والذكر، تحفيزاً لا حكماً.",
+        content:
+          "جنة واحدة واسعة تكبر تراكمياً مع مداومتك: نخيل وزهور وثمار كالجواهر وأنهار وقصور — تمثيل تحفيزي رمزي.",
       },
-      { property: "og:title", content: "مزرعة وغراس الجنة" },
-      { property: "og:description", content: "غراس رمزية تنمو مع مداومتك على الذكر والسنن." },
+      { property: "og:title", content: "جنة الغراس" },
+      { property: "og:description", content: "مشهد أخضر واسع يكبر مع مداومتك على الذكر والسنن." },
     ],
   }),
   component: Farm,
@@ -19,52 +22,59 @@ export const Route = createFileRoute("/farm")({
 
 const seeds = [
   { id: "rawatib", name: "سنن رواتب", icon: "🕌", grow: "قصر" },
-  { id: "ikhlas", name: "الإخلاص", icon: "🤍", grow: "نور" },
-  { id: "baqiyat", name: "الباقيات الصالحات", icon: "🌾", grow: "غرس" },
-  { id: "hawqala", name: "لا حول ولا قوة إلا بالله", icon: "💎", grow: "كنز" },
+  { id: "ikhlas", name: "الإخلاص", icon: "🤍", grow: "نور وزهور" },
+  { id: "baqiyat", name: "الباقيات الصالحات", icon: "🌾", grow: "نخيل" },
+  { id: "hawqala", name: "لا حول ولا قوة إلا بالله", icon: "💎", grow: "كنز من الجواهر" },
 ];
 
 function Farm() {
-  const { today, add } = useDayLog();
-  const score = seeds.reduce((n, s) => n + (today[s.id] ?? 0), 0);
-  const level = Math.min(5, Math.floor(score / 3));
+  const { today, add, lifetimeById, lifetimeTotal } = useDayLog();
+  const [wide, setWide] = useState(false);
+  const c = paradiseCounts(lifetimeTotal);
+  const todayScore = seeds.reduce((n, s) => n + (today[s.id] ?? 0), 0);
 
   return (
     <div className="space-y-4">
       <PageTitle
         emoji="🌴"
-        title="مزرعة وغراس الجنة"
-        sub="تمثيل تحفيزي رمزي يعينك على المداومة — وليس نتيجة دينية مؤكدة."
+        title="جنة الغراس"
+        sub="جنّة واحدة واسعة تكبر معك ولا تُمحى بنهاية اليوم — تمثيل تحفيزي رمزي، لا نتيجة دينية مؤكدة."
       />
 
-      <div className="garden-sky relative overflow-hidden rounded-3xl p-5 text-primary-foreground shadow-[var(--shadow-soft)]">
-        <div className="flex h-44 items-end justify-around">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <span
-              key={i}
-              className={`animate-sway transition-all duration-500 ${i < level ? "opacity-100" : "opacity-25"}`}
-              style={{ fontSize: `${28 + (i < level ? level * 6 : 0)}px`, animationDelay: `${i * 0.4}s` }}
-            >
-              {["🌱", "🌴", "🏰", "🌳", "💎"][i]}
-            </span>
-          ))}
+      <div className="overflow-hidden rounded-3xl border border-border shadow-[var(--shadow-soft)]">
+        <ParadiseScene lifetime={lifetimeTotal} />
+        <div className="flex flex-wrap items-center justify-between gap-2 bg-card px-4 py-3 text-xs text-muted-foreground">
+          <span>
+            🌴 {c.palms} نخلة · 🌸 {c.flowers} زهرة · 💎 {c.jewels} ثمرة · 🏰 {c.palaces} قصر · 💧{" "}
+            {c.rivers} نهر
+          </span>
+          <button onClick={() => setWide(true)} className="font-semibold text-primary">
+            عرض واسع ⤢
+          </button>
         </div>
-        <div className="mt-2 flex items-center justify-between text-sm">
-          <span>مستوى النماء الرمزي: {level} / 5</span>
-          <span>{score} تسجيل اليوم</span>
-        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-2">
+        <Card className="text-center">
+          <p className="text-2xl font-bold tabular-nums">{lifetimeTotal}</p>
+          <p className="text-xs text-muted-foreground">مجموع تراكمي (لا يُصفَّر)</p>
+        </Card>
+        <Card className="text-center">
+          <p className="text-2xl font-bold tabular-nums">{todayScore}</p>
+          <p className="text-xs text-muted-foreground">غِراس اليوم</p>
+        </Card>
       </div>
 
       <div className="grid gap-2">
         {seeds.map((s) => (
           <Card key={s.id} className="flex items-center justify-between gap-3">
-            <div>
+            <div className="min-w-0">
               <p className="font-semibold">
                 <span className="ml-2">{s.icon}</span>
                 {s.name}
               </p>
               <p className="text-xs text-muted-foreground">
-                ينمو منه: {s.grow} · اليوم: {today[s.id] ?? 0}
+                ينمو منه: {s.grow} · اليوم: {today[s.id] ?? 0} · تراكمي: {lifetimeById[s.id] ?? 0}
               </p>
             </div>
             <Btn onClick={() => add(s.id)}>أغرس</Btn>
@@ -89,11 +99,25 @@ function Farm() {
       </Card>
 
       <div className="flex items-center gap-3">
-        <ShareReminder title="نماء المزرعة" />
+        <ShareReminder title="نماء الجنة" />
         <span className="text-xs text-muted-foreground">الافتراضي: خاص 🔒</span>
       </div>
 
       <Note>الرموز هنا وسيلة تحفيز بصري فقط، ولا تعني قبولاً ولا أجراً محدداً.</Note>
+
+      {wide ? (
+        <div className="fixed inset-0 z-50 flex flex-col bg-foreground/70 p-2">
+          <button
+            onClick={() => setWide(false)}
+            className="mb-2 self-start rounded-2xl bg-card px-4 py-2 text-sm font-semibold"
+          >
+            إغلاق ✕
+          </button>
+          <div className="flex flex-1 items-center overflow-auto rounded-3xl bg-card">
+            <ParadiseScene lifetime={lifetimeTotal} />
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
