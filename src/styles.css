@@ -205,3 +205,47 @@
   transform-origin: bottom center;
 }
 
+
+@keyframes slow-pan {
+  0%,
+  100% {
+    transform: scale(1.06) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.12) translate3d(-1.5%, -1%, 0);
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(0.7);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.35);
+  }
+}
+
+@keyframes soft-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@utility animate-slow-pan {
+  animation: slow-pan 34s ease-in-out infinite;
+}
+
+@utility animate-twinkle {
+  animation: twinkle 4.2s ease-in-out infinite;
+}
+
+@utility animate-glow {
+  animation: soft-glow 9s ease-in-out infinite;
+}
