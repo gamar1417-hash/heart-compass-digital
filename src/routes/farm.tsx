@@ -122,9 +122,10 @@ function Farm() {
           >
             إغلاق ✕
           </button>
-          <div className="flex flex-1 items-center overflow-auto rounded-3xl bg-card">
-            <ParadiseScene lifetime={lifetimeTotal} />
+          <div className="flex-1 overflow-hidden rounded-3xl bg-card">
+            <ParadiseScene lifetime={lifetimeTotal} tall />
           </div>
+
         </div>
       ) : null}
     </div>
