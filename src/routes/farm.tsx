@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Btn, Card, Note, PageTitle, ShareReminder } from "@/components/bits";
-import { ParadiseScene, paradiseCounts } from "@/components/paradise";
+import { ParadiseScene, paradiseCounts, paradiseStage } from "@/components/paradise";
 import { useDayLog } from "@/lib/store";
 
 export const Route = createFileRoute("/farm")({
@@ -31,6 +31,8 @@ function Farm() {
   const { today, add, lifetimeById, lifetimeTotal } = useDayLog();
   const [wide, setWide] = useState(false);
   const c = paradiseCounts(lifetimeTotal);
+  const stage = paradiseStage(lifetimeTotal);
+
   const todayScore = seeds.reduce((n, s) => n + (today[s.id] ?? 0), 0);
 
   return (
@@ -48,11 +50,18 @@ function Farm() {
             🌴 {c.palms} نخلة · 🌸 {c.flowers} زهرة · 💎 {c.jewels} ثمرة · 🏰 {c.palaces} قصر · 💧{" "}
             {c.rivers} نهر
           </span>
+          <span className="font-semibold text-primary">{stage.label}</span>
           <button onClick={() => setWide(true)} className="font-semibold text-primary">
             عرض واسع ⤢
           </button>
         </div>
+        {stage.next ? (
+          <div className="bg-card px-4 pb-3 text-xs text-muted-foreground">
+            تتّسع الجنة أكثر عند بلوغ {stage.next} عملاً تراكمياً (لديكِ {lifetimeTotal}).
+          </div>
+        ) : null}
       </div>
+
 
       <div className="grid grid-cols-2 gap-2">
         <Card className="text-center">
