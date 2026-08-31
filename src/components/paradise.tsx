@@ -27,10 +27,10 @@ export function paradiseCounts(lifetime: number): ParadiseCounts {
 }
 
 const STAGES = [
-  { src: p1, at: 0, label: "وادٍ أخضر وارف الظلال" },
-  { src: p2, at: 12, label: "بساتين ونهر وحرير" },
-  { src: p3, at: 40, label: "قصور ولؤلؤ وثمار" },
-  { src: p4, at: 90, label: "جنة واسعة وكنوز" },
+  { src: p1, at: 0, label: "جنات تجري من تحتها الأنهار" },
+  { src: p2, at: 12, label: "أنهار من ماء ولبن وعسل" },
+  { src: p3, at: 40, label: "أساور من ذهب ولؤلؤ وحرير" },
+  { src: p4, at: 90, label: "قصور وكنوز الفردوس" },
 ];
 
 export function paradiseStage(lifetime: number) {
