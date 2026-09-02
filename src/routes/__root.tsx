@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { CloudSync, useSession } from "@/lib/cloud";
 
 function NotFoundComponent() {
   return (
@@ -117,11 +118,25 @@ const nav = [
   { to: "/prayer", label: "الصلاة", icon: "🕌" },
 ] as const;
 
+function AccountLink() {
+  const { user } = useSession();
+  return (
+    <Link
+      to="/auth"
+      className="mr-auto flex shrink-0 items-center gap-1 rounded-2xl border border-border px-2.5 py-1.5 text-[11px] text-muted-foreground"
+    >
+      <span>{user ? "☁️" : "🔐"}</span>
+      {user ? "محفوظ" : "دخول"}
+    </Link>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
+      <CloudSync />
       <div className="min-h-screen pb-24">
         <div className="sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur">
           <div className="mx-auto flex max-w-3xl items-center gap-2 px-4 py-2.5">
@@ -134,6 +149,7 @@ function RootComponent() {
                 حاسبوا أنفسكم قبل أن تُحاسَبوا
               </p>
             </div>
+            <AccountLink />
           </div>
         </div>
 
