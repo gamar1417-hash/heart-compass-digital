@@ -47,12 +47,14 @@ export function Btn({
   variant = "primary",
   className = "",
   type = "button",
+  disabled = false,
 }: {
   children: ReactNode;
   onClick?: () => void;
   variant?: "primary" | "ghost" | "accent" | "danger";
   className?: string;
   type?: "button" | "submit";
+  disabled?: boolean;
 }) {
   const map = {
     primary: "bg-primary text-primary-foreground hover:opacity-90",
@@ -64,8 +66,10 @@ export function Btn({
     <button
       type={type}
       onClick={onClick}
-      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl px-4 text-sm font-semibold transition ${map[variant]} ${className}`}
+      disabled={disabled}
+      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl px-4 text-sm font-semibold transition disabled:opacity-50 ${map[variant]} ${className}`}
     >
+
       {children}
     </button>
   );
