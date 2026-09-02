@@ -52,7 +52,7 @@ export function CloudSync() {
       restoreAll(merged);
       await supabase
         .from("user_state")
-        .upsert({ user_id: userId, data: merged }, { onConflict: "user_id" });
+        .upsert({ user_id: userId, data: merged as never }, { onConflict: "user_id" });
     })();
     return () => {
       alive = false;
@@ -67,7 +67,7 @@ export function CloudSync() {
       timer.current = setTimeout(() => {
         void supabase
           .from("user_state")
-          .upsert({ user_id: userId, data: snapshotAll() }, { onConflict: "user_id" });
+          .upsert({ user_id: userId, data: snapshotAll() as never }, { onConflict: "user_id" });
       }, 1200);
     };
     window.addEventListener(LOCAL_WRITE_EVENT, onWrite);
