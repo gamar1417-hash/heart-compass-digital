@@ -21,6 +21,7 @@ import { Route as SabrRouteImport } from './routes/sabr'
 import { Route as SectionsRouteImport } from './routes/sections'
 import { Route as TadabburRouteImport } from './routes/tadabbur'
 import { Route as TawbahRouteImport } from './routes/tawbah'
+import { Route as WasfRouteImport } from './routes/wasf'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -82,6 +83,11 @@ const TawbahRoute = TawbahRouteImport.update({
   path: '/tawbah',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WasfRoute = WasfRouteImport.update({
+  id: '/wasf',
+  path: '/wasf',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -96,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/sections': typeof SectionsRoute
   '/tadabbur': typeof TadabburRoute
   '/tawbah': typeof TawbahRoute
+  '/wasf': typeof WasfRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -110,6 +117,7 @@ export interface FileRoutesByTo {
   '/sections': typeof SectionsRoute
   '/tadabbur': typeof TadabburRoute
   '/tawbah': typeof TawbahRoute
+  '/wasf': typeof WasfRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -125,6 +133,7 @@ export interface FileRoutesById {
   '/sections': typeof SectionsRoute
   '/tadabbur': typeof TadabburRoute
   '/tawbah': typeof TawbahRoute
+  '/wasf': typeof WasfRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
     | '/sections'
     | '/tadabbur'
     | '/tawbah'
+    | '/wasf'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
     | '/sections'
     | '/tadabbur'
     | '/tawbah'
+    | '/wasf'
   id:
     | '__root__'
     | '/'
@@ -169,6 +180,7 @@ export interface FileRouteTypes {
     | '/sections'
     | '/tadabbur'
     | '/tawbah'
+    | '/wasf'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -184,6 +196,7 @@ export interface RootRouteChildren {
   SectionsRoute: typeof SectionsRoute
   TadabburRoute: typeof TadabburRoute
   TawbahRoute: typeof TawbahRoute
+  WasfRoute: typeof WasfRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -272,6 +285,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TawbahRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/wasf': {
+      id: '/wasf'
+      path: '/wasf'
+      fullPath: '/wasf'
+      preLoaderRoute: typeof WasfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -288,6 +308,7 @@ const rootRouteChildren: RootRouteChildren = {
   SectionsRoute: SectionsRoute,
   TadabburRoute: TadabburRoute,
   TawbahRoute: TawbahRoute,
+  WasfRoute: WasfRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
