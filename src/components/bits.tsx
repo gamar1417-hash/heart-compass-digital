@@ -80,35 +80,101 @@ export function Counter({
   value,
   onAdd,
   hint,
+  lifetime,
+  virtue,
 }: {
   label: string;
   value: number;
   onAdd: (n: number) => void;
   hint?: string;
+  lifetime?: number;
+  virtue?: string;
 }) {
+  const [manual, setManual] = useState("");
+  const [openVirtue, setOpenVirtue] = useState(false);
+
+  const submitManual = () => {
+    const n = Number(manual.replace(/[^\d-]/g, ""));
+    if (!Number.isFinite(n) || n === 0) return;
+    onAdd(n);
+    setManual("");
+  };
+
   return (
-    <Card className="flex items-center justify-between gap-3">
-      <div className="min-w-0">
-        <p className="truncate font-semibold">{label}</p>
-        {hint ? <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p> : null}
+    <Card className="space-y-3">
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <p className="truncate font-semibold">{label}</p>
+          {hint ? <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p> : null}
+          {typeof lifetime === "number" ? (
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              تراكمي: <b className="tabular-nums text-primary">{lifetime}</b>
+            </p>
+          ) : null}
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          <button
+            aria-label={`إنقاص ${label}`}
+            onClick={() => onAdd(-1)}
+            className="size-9 rounded-full bg-secondary text-lg text-secondary-foreground"
+          >
+            −
+          </button>
+          <span className="w-10 text-center text-lg font-bold tabular-nums">{value}</span>
+          <button
+            aria-label={`زيادة ${label}`}
+            onClick={() => onAdd(1)}
+            className="size-11 rounded-full bg-primary text-xl text-primary-foreground"
+          >
+            +
+          </button>
+        </div>
       </div>
-      <div className="flex shrink-0 items-center gap-2">
+
+      <div className="flex flex-wrap items-center gap-2">
+        {[10, 33, 100].map((n) => (
+          <button
+            key={n}
+            onClick={() => onAdd(n)}
+            className="min-h-9 rounded-full bg-secondary px-3 text-xs font-semibold text-secondary-foreground"
+          >
+            +{n}
+          </button>
+        ))}
+        <input
+          inputMode="numeric"
+          value={manual}
+          onChange={(e) => setManual(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") submitManual();
+          }}
+          placeholder="إدخال يدوي"
+          aria-label={`إدخال يدوي لعدد ${label}`}
+          className="min-h-9 w-28 rounded-2xl border border-border bg-card px-3 text-sm"
+        />
         <button
-          aria-label={`إنقاص ${label}`}
-          onClick={() => onAdd(-1)}
-          className="size-9 rounded-full bg-secondary text-lg text-secondary-foreground"
+          onClick={submitManual}
+          className="min-h-9 rounded-2xl bg-primary px-3 text-xs font-semibold text-primary-foreground"
         >
-          −
-        </button>
-        <span className="w-9 text-center text-lg font-bold tabular-nums">{value}</span>
-        <button
-          aria-label={`زيادة ${label}`}
-          onClick={() => onAdd(1)}
-          className="size-11 rounded-full bg-primary text-xl text-primary-foreground"
-        >
-          +
+          أضِف
         </button>
       </div>
+
+      {virtue ? (
+        <div>
+          <button
+            onClick={() => setOpenVirtue((v) => !v)}
+            className="text-xs font-semibold text-primary"
+          >
+            {openVirtue ? "إخفاء فضله ▲" : "فضله في الدنيا ▾"}
+          </button>
+          {openVirtue ? (
+            <p className="mt-1 rounded-2xl bg-secondary/60 p-3 text-xs leading-relaxed text-muted-foreground">
+              {virtue}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
     </Card>
   );
 }
