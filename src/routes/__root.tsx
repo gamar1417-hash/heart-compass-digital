@@ -115,6 +115,7 @@ const nav = [
   { to: "/farm", label: "المزرعة", icon: "🌴" },
   { to: "/deeds", label: "أعمالي", icon: "📿" },
   { to: "/maqamat", label: "المقامات", icon: "🧭" },
+  { to: "/wasf", label: "وصفات الجنة", icon: "✨" },
   { to: "/prayer", label: "الصلاة", icon: "🕌" },
 ] as const;
 

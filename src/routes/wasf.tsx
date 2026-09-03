@@ -134,7 +134,7 @@ function WasfPage() {
             <span className="ml-2 text-xl">{w.emoji}</span>
             {w.title}
           </h2>
-          <p className="font-quran text-base leading-loose text-foreground">{w.text}</p>
+          <p className="font-display text-base leading-loose text-foreground">{w.text}</p>
           <p className="text-xs font-semibold text-primary">{w.ref}</p>
           <p className="text-sm leading-relaxed text-muted-foreground">{w.meaning}</p>
 
