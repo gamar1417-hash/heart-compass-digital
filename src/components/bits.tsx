@@ -88,7 +88,7 @@ export function Counter({
   onAdd: (n: number) => void;
   hint?: string;
   lifetime?: number;
-  virtue?: string;
+  virtue?: string | undefined;
 }) {
   const [manual, setManual] = useState("");
   const [openVirtue, setOpenVirtue] = useState(false);
