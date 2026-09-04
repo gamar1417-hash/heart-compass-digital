@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DeedsRouteImport } from './routes/deeds'
+import { Route as FadlRouteImport } from './routes/fadl'
 import { Route as FarmRouteImport } from './routes/farm'
 import { Route as FeedbackRouteImport } from './routes/feedback'
 import { Route as MaqamatRouteImport } from './routes/maqamat'
@@ -36,6 +37,11 @@ const AuthRoute = AuthRouteImport.update({
 const DeedsRoute = DeedsRouteImport.update({
   id: '/deeds',
   path: '/deeds',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FadlRoute = FadlRouteImport.update({
+  id: '/fadl',
+  path: '/fadl',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FarmRoute = FarmRouteImport.update({
@@ -93,6 +99,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/deeds': typeof DeedsRoute
+  '/fadl': typeof FadlRoute
   '/farm': typeof FarmRoute
   '/feedback': typeof FeedbackRoute
   '/maqamat': typeof MaqamatRoute
@@ -108,6 +115,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/deeds': typeof DeedsRoute
+  '/fadl': typeof FadlRoute
   '/farm': typeof FarmRoute
   '/feedback': typeof FeedbackRoute
   '/maqamat': typeof MaqamatRoute
@@ -124,6 +132,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/deeds': typeof DeedsRoute
+  '/fadl': typeof FadlRoute
   '/farm': typeof FarmRoute
   '/feedback': typeof FeedbackRoute
   '/maqamat': typeof MaqamatRoute
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/deeds'
+    | '/fadl'
     | '/farm'
     | '/feedback'
     | '/maqamat'
@@ -156,6 +166,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/deeds'
+    | '/fadl'
     | '/farm'
     | '/feedback'
     | '/maqamat'
@@ -171,6 +182,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/deeds'
+    | '/fadl'
     | '/farm'
     | '/feedback'
     | '/maqamat'
@@ -187,6 +199,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   DeedsRoute: typeof DeedsRoute
+  FadlRoute: typeof FadlRoute
   FarmRoute: typeof FarmRoute
   FeedbackRoute: typeof FeedbackRoute
   MaqamatRoute: typeof MaqamatRoute
@@ -220,6 +233,13 @@ declare module '@tanstack/react-router' {
       path: '/deeds'
       fullPath: '/deeds'
       preLoaderRoute: typeof DeedsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fadl': {
+      id: '/fadl'
+      path: '/fadl'
+      fullPath: '/fadl'
+      preLoaderRoute: typeof FadlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/farm': {
@@ -299,6 +319,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   DeedsRoute: DeedsRoute,
+  FadlRoute: FadlRoute,
   FarmRoute: FarmRoute,
   FeedbackRoute: FeedbackRoute,
   MaqamatRoute: MaqamatRoute,
