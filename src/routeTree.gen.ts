@@ -14,6 +14,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as DeedsRouteImport } from './routes/deeds'
 import { Route as FadlRouteImport } from './routes/fadl'
+import { Route as FamilyRouteImport } from './routes/family'
 import { Route as FarmRouteImport } from './routes/farm'
 import { Route as FeedbackRouteImport } from './routes/feedback'
 import { Route as MaqamatRouteImport } from './routes/maqamat'
@@ -50,6 +51,11 @@ const DeedsRoute = DeedsRouteImport.update({
 const FadlRoute = FadlRouteImport.update({
   id: '/fadl',
   path: '/fadl',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FamilyRoute = FamilyRouteImport.update({
+  id: '/family',
+  path: '/family',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FarmRoute = FarmRouteImport.update({
@@ -119,6 +125,7 @@ export interface FileRoutesByFullPath {
   '/calendar': typeof CalendarRoute
   '/deeds': typeof DeedsRoute
   '/fadl': typeof FadlRoute
+  '/family': typeof FamilyRoute
   '/farm': typeof FarmRoute
   '/feedback': typeof FeedbackRoute
   '/maqamat': typeof MaqamatRoute
@@ -138,6 +145,7 @@ export interface FileRoutesByTo {
   '/calendar': typeof CalendarRoute
   '/deeds': typeof DeedsRoute
   '/fadl': typeof FadlRoute
+  '/family': typeof FamilyRoute
   '/farm': typeof FarmRoute
   '/feedback': typeof FeedbackRoute
   '/maqamat': typeof MaqamatRoute
@@ -158,6 +166,7 @@ export interface FileRoutesById {
   '/calendar': typeof CalendarRoute
   '/deeds': typeof DeedsRoute
   '/fadl': typeof FadlRoute
+  '/family': typeof FamilyRoute
   '/farm': typeof FarmRoute
   '/feedback': typeof FeedbackRoute
   '/maqamat': typeof MaqamatRoute
@@ -179,6 +188,7 @@ export interface FileRouteTypes {
     | '/calendar'
     | '/deeds'
     | '/fadl'
+    | '/family'
     | '/farm'
     | '/feedback'
     | '/maqamat'
@@ -198,6 +208,7 @@ export interface FileRouteTypes {
     | '/calendar'
     | '/deeds'
     | '/fadl'
+    | '/family'
     | '/farm'
     | '/feedback'
     | '/maqamat'
@@ -217,6 +228,7 @@ export interface FileRouteTypes {
     | '/calendar'
     | '/deeds'
     | '/fadl'
+    | '/family'
     | '/farm'
     | '/feedback'
     | '/maqamat'
@@ -237,6 +249,7 @@ export interface RootRouteChildren {
   CalendarRoute: typeof CalendarRoute
   DeedsRoute: typeof DeedsRoute
   FadlRoute: typeof FadlRoute
+  FamilyRoute: typeof FamilyRoute
   FarmRoute: typeof FarmRoute
   FeedbackRoute: typeof FeedbackRoute
   MaqamatRoute: typeof MaqamatRoute
@@ -286,6 +299,13 @@ declare module '@tanstack/react-router' {
       path: '/fadl'
       fullPath: '/fadl'
       preLoaderRoute: typeof FadlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/family': {
+      id: '/family'
+      path: '/family'
+      fullPath: '/family'
+      preLoaderRoute: typeof FamilyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/farm': {
@@ -381,6 +401,7 @@ const rootRouteChildren: RootRouteChildren = {
   CalendarRoute: CalendarRoute,
   DeedsRoute: DeedsRoute,
   FadlRoute: FadlRoute,
+  FamilyRoute: FamilyRoute,
   FarmRoute: FarmRoute,
   FeedbackRoute: FeedbackRoute,
   MaqamatRoute: MaqamatRoute,
