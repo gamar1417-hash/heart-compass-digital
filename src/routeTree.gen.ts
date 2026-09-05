@@ -19,6 +19,7 @@ import { Route as MaqamatRouteImport } from './routes/maqamat'
 import { Route as MercyRouteImport } from './routes/mercy'
 import { Route as PrayerRouteImport } from './routes/prayer'
 import { Route as SabrRouteImport } from './routes/sabr'
+import { Route as SalawatRouteImport } from './routes/salawat'
 import { Route as SectionsRouteImport } from './routes/sections'
 import { Route as TadabburRouteImport } from './routes/tadabbur'
 import { Route as TawbahRouteImport } from './routes/tawbah'
@@ -74,6 +75,11 @@ const SabrRoute = SabrRouteImport.update({
   path: '/sabr',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SalawatRoute = SalawatRouteImport.update({
+  id: '/salawat',
+  path: '/salawat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SectionsRoute = SectionsRouteImport.update({
   id: '/sections',
   path: '/sections',
@@ -106,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/mercy': typeof MercyRoute
   '/prayer': typeof PrayerRoute
   '/sabr': typeof SabrRoute
+  '/salawat': typeof SalawatRoute
   '/sections': typeof SectionsRoute
   '/tadabbur': typeof TadabburRoute
   '/tawbah': typeof TawbahRoute
@@ -122,6 +129,7 @@ export interface FileRoutesByTo {
   '/mercy': typeof MercyRoute
   '/prayer': typeof PrayerRoute
   '/sabr': typeof SabrRoute
+  '/salawat': typeof SalawatRoute
   '/sections': typeof SectionsRoute
   '/tadabbur': typeof TadabburRoute
   '/tawbah': typeof TawbahRoute
@@ -139,6 +147,7 @@ export interface FileRoutesById {
   '/mercy': typeof MercyRoute
   '/prayer': typeof PrayerRoute
   '/sabr': typeof SabrRoute
+  '/salawat': typeof SalawatRoute
   '/sections': typeof SectionsRoute
   '/tadabbur': typeof TadabburRoute
   '/tawbah': typeof TawbahRoute
@@ -157,6 +166,7 @@ export interface FileRouteTypes {
     | '/mercy'
     | '/prayer'
     | '/sabr'
+    | '/salawat'
     | '/sections'
     | '/tadabbur'
     | '/tawbah'
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
     | '/mercy'
     | '/prayer'
     | '/sabr'
+    | '/salawat'
     | '/sections'
     | '/tadabbur'
     | '/tawbah'
@@ -189,6 +200,7 @@ export interface FileRouteTypes {
     | '/mercy'
     | '/prayer'
     | '/sabr'
+    | '/salawat'
     | '/sections'
     | '/tadabbur'
     | '/tawbah'
@@ -206,6 +218,7 @@ export interface RootRouteChildren {
   MercyRoute: typeof MercyRoute
   PrayerRoute: typeof PrayerRoute
   SabrRoute: typeof SabrRoute
+  SalawatRoute: typeof SalawatRoute
   SectionsRoute: typeof SectionsRoute
   TadabburRoute: typeof TadabburRoute
   TawbahRoute: typeof TawbahRoute
@@ -284,6 +297,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SabrRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/salawat': {
+      id: '/salawat'
+      path: '/salawat'
+      fullPath: '/salawat'
+      preLoaderRoute: typeof SalawatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sections': {
       id: '/sections'
       path: '/sections'
@@ -326,6 +346,7 @@ const rootRouteChildren: RootRouteChildren = {
   MercyRoute: MercyRoute,
   PrayerRoute: PrayerRoute,
   SabrRoute: SabrRoute,
+  SalawatRoute: SalawatRoute,
   SectionsRoute: SectionsRoute,
   TadabburRoute: TadabburRoute,
   TawbahRoute: TawbahRoute,
