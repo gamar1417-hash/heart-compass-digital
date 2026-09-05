@@ -149,10 +149,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      family_id_by_code: { Args: { _code: string }; Returns: string }
       is_family_member: {
         Args: { _family_id: string; _user_id: string }
         Returns: boolean
+      }
+      join_family_by_code: {
+        Args: { _code: string; _display_name: string }
+        Returns: string
       }
     }
     Enums: {
