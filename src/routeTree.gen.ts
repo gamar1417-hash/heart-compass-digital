@@ -11,14 +11,18 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as DeedsRouteImport } from './routes/deeds'
 import { Route as FadlRouteImport } from './routes/fadl'
+import { Route as FamilyRouteImport } from './routes/family'
 import { Route as FarmRouteImport } from './routes/farm'
 import { Route as FeedbackRouteImport } from './routes/feedback'
 import { Route as MaqamatRouteImport } from './routes/maqamat'
 import { Route as MercyRouteImport } from './routes/mercy'
 import { Route as PrayerRouteImport } from './routes/prayer'
+import { Route as ReportRouteImport } from './routes/report'
 import { Route as SabrRouteImport } from './routes/sabr'
+import { Route as SalawatRouteImport } from './routes/salawat'
 import { Route as SectionsRouteImport } from './routes/sections'
 import { Route as TadabburRouteImport } from './routes/tadabbur'
 import { Route as TawbahRouteImport } from './routes/tawbah'
@@ -34,6 +38,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CalendarRoute = CalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DeedsRoute = DeedsRouteImport.update({
   id: '/deeds',
   path: '/deeds',
@@ -42,6 +51,11 @@ const DeedsRoute = DeedsRouteImport.update({
 const FadlRoute = FadlRouteImport.update({
   id: '/fadl',
   path: '/fadl',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FamilyRoute = FamilyRouteImport.update({
+  id: '/family',
+  path: '/family',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FarmRoute = FarmRouteImport.update({
@@ -69,9 +83,19 @@ const PrayerRoute = PrayerRouteImport.update({
   path: '/prayer',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReportRoute = ReportRouteImport.update({
+  id: '/report',
+  path: '/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SabrRoute = SabrRouteImport.update({
   id: '/sabr',
   path: '/sabr',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SalawatRoute = SalawatRouteImport.update({
+  id: '/salawat',
+  path: '/salawat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SectionsRoute = SectionsRouteImport.update({
@@ -98,14 +122,18 @@ const WasfRoute = WasfRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/calendar': typeof CalendarRoute
   '/deeds': typeof DeedsRoute
   '/fadl': typeof FadlRoute
+  '/family': typeof FamilyRoute
   '/farm': typeof FarmRoute
   '/feedback': typeof FeedbackRoute
   '/maqamat': typeof MaqamatRoute
   '/mercy': typeof MercyRoute
   '/prayer': typeof PrayerRoute
+  '/report': typeof ReportRoute
   '/sabr': typeof SabrRoute
+  '/salawat': typeof SalawatRoute
   '/sections': typeof SectionsRoute
   '/tadabbur': typeof TadabburRoute
   '/tawbah': typeof TawbahRoute
@@ -114,14 +142,18 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/calendar': typeof CalendarRoute
   '/deeds': typeof DeedsRoute
   '/fadl': typeof FadlRoute
+  '/family': typeof FamilyRoute
   '/farm': typeof FarmRoute
   '/feedback': typeof FeedbackRoute
   '/maqamat': typeof MaqamatRoute
   '/mercy': typeof MercyRoute
   '/prayer': typeof PrayerRoute
+  '/report': typeof ReportRoute
   '/sabr': typeof SabrRoute
+  '/salawat': typeof SalawatRoute
   '/sections': typeof SectionsRoute
   '/tadabbur': typeof TadabburRoute
   '/tawbah': typeof TawbahRoute
@@ -131,14 +163,18 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/calendar': typeof CalendarRoute
   '/deeds': typeof DeedsRoute
   '/fadl': typeof FadlRoute
+  '/family': typeof FamilyRoute
   '/farm': typeof FarmRoute
   '/feedback': typeof FeedbackRoute
   '/maqamat': typeof MaqamatRoute
   '/mercy': typeof MercyRoute
   '/prayer': typeof PrayerRoute
+  '/report': typeof ReportRoute
   '/sabr': typeof SabrRoute
+  '/salawat': typeof SalawatRoute
   '/sections': typeof SectionsRoute
   '/tadabbur': typeof TadabburRoute
   '/tawbah': typeof TawbahRoute
@@ -149,14 +185,18 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/calendar'
     | '/deeds'
     | '/fadl'
+    | '/family'
     | '/farm'
     | '/feedback'
     | '/maqamat'
     | '/mercy'
     | '/prayer'
+    | '/report'
     | '/sabr'
+    | '/salawat'
     | '/sections'
     | '/tadabbur'
     | '/tawbah'
@@ -165,14 +205,18 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/calendar'
     | '/deeds'
     | '/fadl'
+    | '/family'
     | '/farm'
     | '/feedback'
     | '/maqamat'
     | '/mercy'
     | '/prayer'
+    | '/report'
     | '/sabr'
+    | '/salawat'
     | '/sections'
     | '/tadabbur'
     | '/tawbah'
@@ -181,14 +225,18 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/auth'
+    | '/calendar'
     | '/deeds'
     | '/fadl'
+    | '/family'
     | '/farm'
     | '/feedback'
     | '/maqamat'
     | '/mercy'
     | '/prayer'
+    | '/report'
     | '/sabr'
+    | '/salawat'
     | '/sections'
     | '/tadabbur'
     | '/tawbah'
@@ -198,14 +246,18 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
+  CalendarRoute: typeof CalendarRoute
   DeedsRoute: typeof DeedsRoute
   FadlRoute: typeof FadlRoute
+  FamilyRoute: typeof FamilyRoute
   FarmRoute: typeof FarmRoute
   FeedbackRoute: typeof FeedbackRoute
   MaqamatRoute: typeof MaqamatRoute
   MercyRoute: typeof MercyRoute
   PrayerRoute: typeof PrayerRoute
+  ReportRoute: typeof ReportRoute
   SabrRoute: typeof SabrRoute
+  SalawatRoute: typeof SalawatRoute
   SectionsRoute: typeof SectionsRoute
   TadabburRoute: typeof TadabburRoute
   TawbahRoute: typeof TawbahRoute
@@ -228,6 +280,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/calendar': {
+      id: '/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof CalendarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/deeds': {
       id: '/deeds'
       path: '/deeds'
@@ -240,6 +299,13 @@ declare module '@tanstack/react-router' {
       path: '/fadl'
       fullPath: '/fadl'
       preLoaderRoute: typeof FadlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/family': {
+      id: '/family'
+      path: '/family'
+      fullPath: '/family'
+      preLoaderRoute: typeof FamilyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/farm': {
@@ -277,11 +343,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrayerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/report': {
+      id: '/report'
+      path: '/report'
+      fullPath: '/report'
+      preLoaderRoute: typeof ReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sabr': {
       id: '/sabr'
       path: '/sabr'
       fullPath: '/sabr'
       preLoaderRoute: typeof SabrRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/salawat': {
+      id: '/salawat'
+      path: '/salawat'
+      fullPath: '/salawat'
+      preLoaderRoute: typeof SalawatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sections': {
@@ -318,14 +398,18 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
+  CalendarRoute: CalendarRoute,
   DeedsRoute: DeedsRoute,
   FadlRoute: FadlRoute,
+  FamilyRoute: FamilyRoute,
   FarmRoute: FarmRoute,
   FeedbackRoute: FeedbackRoute,
   MaqamatRoute: MaqamatRoute,
   MercyRoute: MercyRoute,
   PrayerRoute: PrayerRoute,
+  ReportRoute: ReportRoute,
   SabrRoute: SabrRoute,
+  SalawatRoute: SalawatRoute,
   SectionsRoute: SectionsRoute,
   TadabburRoute: TadabburRoute,
   TawbahRoute: TawbahRoute,
