@@ -73,10 +73,10 @@ function CalendarPage() {
       />
 
       <div className="flex gap-2">
-        <Btn variant={view === "day" ? "solid" : "ghost"} onClick={() => setView("day")}>
+        <Btn variant={view === "day" ? "primary" : "ghost"} onClick={() => setView("day")}>
           عرض يومي
         </Btn>
-        <Btn variant={view === "week" ? "solid" : "ghost"} onClick={() => setView("week")}>
+        <Btn variant={view === "week" ? "primary" : "ghost"} onClick={() => setView("week")}>
           عرض أسبوعي
         </Btn>
       </div>
