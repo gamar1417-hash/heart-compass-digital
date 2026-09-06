@@ -44,7 +44,7 @@ const db = supabase as unknown as {
 
 function FamilyPage() {
   const { user, ready } = useSession();
-  const { today, lifetimeTotal } = useDayLog();
+  const { today, lifetimeTotal, lifetimeById } = useDayLog();
   const [family, setFamily] = useState<Family | null>(null);
   const [rows, setRows] = useState<Progress[]>([]);
   const [name, setName] = useState("");
