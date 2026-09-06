@@ -88,6 +88,9 @@ export type Database = {
           lifetime_total: number
           stage: number
           today_total: number
+          track_nafs: number
+          track_sunan: number
+          track_tawba: number
           updated_at: string
           user_id: string
         }
@@ -99,6 +102,9 @@ export type Database = {
           lifetime_total?: number
           stage?: number
           today_total?: number
+          track_nafs?: number
+          track_sunan?: number
+          track_tawba?: number
           updated_at?: string
           user_id: string
         }
@@ -110,6 +116,9 @@ export type Database = {
           lifetime_total?: number
           stage?: number
           today_total?: number
+          track_nafs?: number
+          track_sunan?: number
+          track_tawba?: number
           updated_at?: string
           user_id?: string
         }
