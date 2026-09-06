@@ -87,7 +87,7 @@ function FamilyPage() {
     void load();
   }, [load]);
 
-  // رفع تقدّمي إلى العائلة كلما تغيّر
+  // رفع تقدّمي إلى العائلة كلما تغيّر (يعمل من أي صفحة عبر FamilySync)
   useEffect(() => {
     if (!user || !family) return;
     const t = setTimeout(() => {
@@ -101,13 +101,28 @@ function FamilyPage() {
             lifetime_total: lifetimeTotal,
             today_total: todayTotal,
             stage: paradiseStage(lifetimeTotal).index ?? 0,
+            track_nafs: myTracks.nafs,
+            track_tawba: myTracks.tawba,
+            track_sunan: myTracks.sunan,
           },
           { onConflict: "family_id,user_id" },
         )
         .then(() => load());
     }, 1200);
     return () => clearTimeout(t);
-  }, [user, family, lifetimeTotal, todayTotal, myName, load]);
+  }, [user, family, lifetimeTotal, todayTotal, myName, myTracks, load]);
+
+  // تحديث لوحة العائلة عند رفع تقدّم أي فرد أو كل نصف دقيقة
+  useEffect(() => {
+    if (!user) return;
+    const onSync = () => void load();
+    window.addEventListener("hasibu:family-sync", onSync);
+    const iv = setInterval(onSync, 30000);
+    return () => {
+      window.removeEventListener("hasibu:family-sync", onSync);
+      clearInterval(iv);
+    };
+  }, [user, load]);
 
   async function createFamily() {
     if (!user || !name.trim()) return;
