@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CloudSync, useSession } from "@/lib/cloud";
+import { FamilySync } from "@/lib/family";
 
 function NotFoundComponent() {
   return (
