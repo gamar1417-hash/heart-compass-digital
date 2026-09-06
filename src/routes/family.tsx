@@ -54,6 +54,7 @@ function FamilyPage() {
   const [msg, setMsg] = useState("");
 
   const todayTotal = Object.values(today).reduce((a, b) => a + b, 0);
+  const myTracks = useMemo(() => trackTotals(lifetimeById), [lifetimeById]);
 
   const load = useCallback(async () => {
     if (!user) return;
