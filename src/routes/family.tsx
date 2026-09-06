@@ -5,6 +5,7 @@ import { Btn, Card, Note, PageTitle } from "@/components/bits";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/cloud";
 import { useDayLog } from "@/lib/store";
+import { TRACKS, trackTotals } from "@/lib/family";
 import { paradiseCounts, paradiseStage, ParadiseScene } from "@/components/paradise";
 
 export const Route = createFileRoute("/family")({
