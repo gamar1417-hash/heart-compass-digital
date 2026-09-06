@@ -276,6 +276,39 @@ function FamilyPage() {
           </Card>
 
           <Card className="space-y-2">
+            <h2 className="font-bold">مسارات العائلة</h2>
+            {TRACKS.map((t) => {
+              const total = rows.reduce(
+                (a, r) =>
+                  a +
+                  (t.id === "nafs"
+                    ? r.track_nafs
+                    : t.id === "tawba"
+                      ? r.track_tawba
+                      : r.track_sunan),
+                0,
+              );
+              const pct = Math.min(100, Math.round((total / Math.max(1, familyLifetime)) * 100));
+              return (
+                <div key={t.id} className="space-y-1">
+                  <div className="flex items-center justify-between text-sm">
+                    <span>
+                      {t.emoji} {t.name}
+                    </span>
+                    <span className="text-[11px] text-muted-foreground">{total}</span>
+                  </div>
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+                    <div className="h-full rounded-full bg-primary" style={{ width: `${pct}%` }} />
+                  </div>
+                </div>
+              );
+            })}
+            <Link to="/calendar" className="text-xs text-primary underline">
+              تفاصيل مساراتي في التقويم
+            </Link>
+          </Card>
+
+          <Card className="space-y-2">
             <h2 className="font-bold">أفراد العائلة</h2>
             {rows.length ? (
               rows.map((r) => (
