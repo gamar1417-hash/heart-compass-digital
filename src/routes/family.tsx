@@ -76,7 +76,9 @@ function FamilyPage() {
     setFamily((fam as Family) ?? null);
     const { data: prog } = await db
       .from("family_progress")
-      .select("user_id, display_name, lifetime_total, today_total, stage")
+      .select(
+        "user_id, display_name, lifetime_total, today_total, stage, track_nafs, track_tawba, track_sunan",
+      )
       .eq("family_id", (mem as { family_id: string }).family_id);
     setRows(((prog as Progress[]) ?? []).sort((a, b) => b.lifetime_total - a.lifetime_total));
   }, [user]);
