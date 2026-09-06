@@ -32,6 +32,9 @@ type Progress = {
   lifetime_total: number;
   today_total: number;
   stage: number;
+  track_nafs: number;
+  track_tawba: number;
+  track_sunan: number;
 };
 
 const db = supabase as unknown as {
