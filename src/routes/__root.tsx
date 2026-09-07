@@ -148,6 +148,8 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <CloudSync />
       <FamilySync />
+      <FamilyNotify />
+      <Toaster position="top-center" dir="rtl" />
       <div className="min-h-screen pb-24">
         <div className="sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur">
           <div className="mx-auto flex max-w-3xl items-center gap-2 px-4 py-2.5">
