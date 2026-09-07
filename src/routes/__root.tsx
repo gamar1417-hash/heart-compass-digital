@@ -116,6 +116,7 @@ const nav = [
   { to: "/farm", label: "المزرعة", icon: "🌴" },
   { to: "/deeds", label: "أعمالي", icon: "📿" },
   { to: "/maqamat", label: "المقامات", icon: "🧭" },
+  { to: "/quran", label: "وردي القرآني", icon: "📖" },
   { to: "/calendar", label: "تقويمي", icon: "🗓️" },
   { to: "/family", label: "العائلة", icon: "🏡" },
   { to: "/report", label: "تقريري", icon: "📊" },

@@ -20,6 +20,7 @@ import { Route as FeedbackRouteImport } from './routes/feedback'
 import { Route as MaqamatRouteImport } from './routes/maqamat'
 import { Route as MercyRouteImport } from './routes/mercy'
 import { Route as PrayerRouteImport } from './routes/prayer'
+import { Route as QuranRouteImport } from './routes/quran'
 import { Route as ReportRouteImport } from './routes/report'
 import { Route as SabrRouteImport } from './routes/sabr'
 import { Route as SalawatRouteImport } from './routes/salawat'
@@ -83,6 +84,11 @@ const PrayerRoute = PrayerRouteImport.update({
   path: '/prayer',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuranRoute = QuranRouteImport.update({
+  id: '/quran',
+  path: '/quran',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReportRoute = ReportRouteImport.update({
   id: '/report',
   path: '/report',
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/maqamat': typeof MaqamatRoute
   '/mercy': typeof MercyRoute
   '/prayer': typeof PrayerRoute
+  '/quran': typeof QuranRoute
   '/report': typeof ReportRoute
   '/sabr': typeof SabrRoute
   '/salawat': typeof SalawatRoute
@@ -151,6 +158,7 @@ export interface FileRoutesByTo {
   '/maqamat': typeof MaqamatRoute
   '/mercy': typeof MercyRoute
   '/prayer': typeof PrayerRoute
+  '/quran': typeof QuranRoute
   '/report': typeof ReportRoute
   '/sabr': typeof SabrRoute
   '/salawat': typeof SalawatRoute
@@ -172,6 +180,7 @@ export interface FileRoutesById {
   '/maqamat': typeof MaqamatRoute
   '/mercy': typeof MercyRoute
   '/prayer': typeof PrayerRoute
+  '/quran': typeof QuranRoute
   '/report': typeof ReportRoute
   '/sabr': typeof SabrRoute
   '/salawat': typeof SalawatRoute
@@ -194,6 +203,7 @@ export interface FileRouteTypes {
     | '/maqamat'
     | '/mercy'
     | '/prayer'
+    | '/quran'
     | '/report'
     | '/sabr'
     | '/salawat'
@@ -214,6 +224,7 @@ export interface FileRouteTypes {
     | '/maqamat'
     | '/mercy'
     | '/prayer'
+    | '/quran'
     | '/report'
     | '/sabr'
     | '/salawat'
@@ -234,6 +245,7 @@ export interface FileRouteTypes {
     | '/maqamat'
     | '/mercy'
     | '/prayer'
+    | '/quran'
     | '/report'
     | '/sabr'
     | '/salawat'
@@ -255,6 +267,7 @@ export interface RootRouteChildren {
   MaqamatRoute: typeof MaqamatRoute
   MercyRoute: typeof MercyRoute
   PrayerRoute: typeof PrayerRoute
+  QuranRoute: typeof QuranRoute
   ReportRoute: typeof ReportRoute
   SabrRoute: typeof SabrRoute
   SalawatRoute: typeof SalawatRoute
@@ -343,6 +356,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrayerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/quran': {
+      id: '/quran'
+      path: '/quran'
+      fullPath: '/quran'
+      preLoaderRoute: typeof QuranRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/report': {
       id: '/report'
       path: '/report'
@@ -407,6 +427,7 @@ const rootRouteChildren: RootRouteChildren = {
   MaqamatRoute: MaqamatRoute,
   MercyRoute: MercyRoute,
   PrayerRoute: PrayerRoute,
+  QuranRoute: QuranRoute,
   ReportRoute: ReportRoute,
   SabrRoute: SabrRoute,
   SalawatRoute: SalawatRoute,
