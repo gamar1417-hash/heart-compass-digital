@@ -13,6 +13,8 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CloudSync, useSession } from "@/lib/cloud";
 import { FamilySync } from "@/lib/family";
+import { FamilyNotify } from "@/lib/family-notify";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
