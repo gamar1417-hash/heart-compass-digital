@@ -274,6 +274,24 @@ function FamilyPage() {
             <p className="text-[11px] text-muted-foreground">
               تراكم العائلة: {familyLifetime} · اليوم: {familyToday}
             </p>
+            <Btn
+              variant="ghost"
+              onClick={async () => {
+                const r = await enableFamilyNotifications();
+                setMsg(
+                  r === "granted"
+                    ? "تم تفعيل الإشعارات، سنخبرك عند ترقّي جنة العائلة."
+                    : r === "open-in-new-tab"
+                      ? "افتح التطبيق في نافذة مستقلة لتفعيل إشعارات المتصفح."
+                      : r === "unsupported"
+                        ? "متصفحك لا يدعم الإشعارات، لكن ستظهر التنبيهات داخل التطبيق."
+                        : "الإشعارات مرفوضة من إعدادات المتصفح.",
+                );
+              }}
+            >
+              🔔 تفعيل إشعارات ترقّي الجنة
+            </Btn>
+            {msg ? <Note>{msg}</Note> : null}
           </Card>
 
           <Card className="space-y-2">
