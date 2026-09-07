@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/cloud";
 import { useDayLog } from "@/lib/store";
 import { TRACKS, trackTotals } from "@/lib/family";
+import { enableFamilyNotifications } from "@/lib/family-notify";
 import { paradiseCounts, paradiseStage, ParadiseScene } from "@/components/paradise";
 
 export const Route = createFileRoute("/family")({
