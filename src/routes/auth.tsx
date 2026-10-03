@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
 import { Btn, Card, Note, PageTitle } from "@/components/bits";
@@ -7,6 +7,9 @@ import { lovable } from "@/integrations/lovable";
 import { useSession } from "@/lib/cloud";
 
 export const Route = createFileRoute("/auth")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    redirect: typeof search.redirect === "string" && search.redirect.startsWith("/") && !search.redirect.startsWith("//") ? search.redirect : "/community",
+  }),
   head: () => ({
     meta: [
       { title: "حسابي — حفظ إنجازاتي ومساراتي" },
@@ -17,6 +20,8 @@ export const Route = createFileRoute("/auth")({
       },
       { property: "og:title", content: "حسابي في حاسبوا أنفسكم" },
       { property: "og:description", content: "حفظ خاص وآمن لإنجازاتك ومساراتك." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: AuthPage,
@@ -25,6 +30,7 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const { session, user } = useSession();
   const navigate = useNavigate();
+  const { redirect } = Route.useSearch();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -50,7 +56,7 @@ function AuthPage() {
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate({ to: "/" });
+        navigate({ to: redirect });
       }
     } catch (e) {
       setMsg(e instanceof Error ? e.message : "تعذّر إتمام العملية، جرّب مرة أخرى.");
@@ -70,11 +76,15 @@ function AuthPage() {
           <Note>
             الجنة والأعمال وفهرس المقامات والمفضلة تُحفظ تلقائياً في حسابك، ولا يراها غيرك.
           </Note>
+          <div className="grid grid-cols-2 gap-2">
+            <Link to="/community" className="rounded-2xl bg-secondary p-3 text-center text-sm font-semibold text-secondary-foreground">المجتمع</Link>
+            <Link to="/profile" className="rounded-2xl bg-secondary p-3 text-center text-sm font-semibold text-secondary-foreground">ملفي الشخصي</Link>
+          </div>
           <Btn
             className="w-full"
             onClick={async () => {
               await supabase.auth.signOut();
-              navigate({ to: "/" });
+               navigate({ to: "/auth", search: { redirect: "/community" }, replace: true });
             }}
           >
             تسجيل الخروج
