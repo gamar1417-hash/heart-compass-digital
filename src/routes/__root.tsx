@@ -122,6 +122,8 @@ const nav = [
   { to: "/quran", label: "وردي القرآني", icon: "📖" },
   { to: "/calendar", label: "تقويمي", icon: "🗓️" },
   { to: "/family", label: "العائلة", icon: "🏡" },
+  { to: "/community", label: "المجتمع", icon: "🤝" },
+  { to: "/friends", label: "الأصدقاء", icon: "🌿" },
   { to: "/report", label: "تقريري", icon: "📊" },
   { to: "/salawat", label: "جدول الصلاة", icon: "🕌" },
   { to: "/wasf", label: "وصفات الجنة", icon: "✨" },
@@ -133,11 +135,11 @@ function AccountLink() {
   const { user } = useSession();
   return (
     <Link
-      to="/auth"
+      to={user ? "/profile" : "/auth"}
       className="mr-auto flex shrink-0 items-center gap-1 rounded-2xl border border-border px-2.5 py-1.5 text-[11px] text-muted-foreground"
     >
       <span>{user ? "☁️" : "🔐"}</span>
-      {user ? "محفوظ" : "دخول"}
+      {user ? "ملفي" : "دخول"}
     </Link>
   );
 }
@@ -179,14 +181,14 @@ function RootComponent() {
         </footer>
 
         <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 backdrop-blur">
-          <div className="mx-auto flex max-w-3xl items-stretch justify-between px-2 py-1.5">
+          <div className="mx-auto flex max-w-3xl items-stretch gap-1 overflow-x-auto px-2 py-1.5">
             {nav.map((n) => (
               <Link
                 key={n.to}
                 to={n.to}
                 activeOptions={{ exact: n.to === "/" }}
                 activeProps={{ className: "text-primary bg-primary/10" }}
-                className="flex flex-1 flex-col items-center gap-0.5 rounded-2xl py-1.5 text-[11px] text-muted-foreground"
+                className="flex min-w-20 shrink-0 flex-col items-center gap-0.5 rounded-2xl py-1.5 text-[11px] text-muted-foreground"
               >
                 <span className="text-lg">{n.icon}</span>
                 {n.label}

@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Btn, Card, Note, PageTitle } from "@/components/bits";
 import { groups } from "@/data/content";
 import { useDayLog } from "@/lib/store";
+import { ParadiseScene } from "@/components/paradise";
 
 type Wasf = {
   id: string;
@@ -106,6 +107,8 @@ export const Route = createFileRoute("/wasf")({
       },
       { property: "og:title", content: "وصفات الجنة — من الكتاب والسنة" },
       { property: "og:description", content: "الأنهار والقصور والحرير والخلود، وما يرتبط بها من أعمال." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: WasfPage,
@@ -122,6 +125,30 @@ function WasfPage() {
         title="وصفات الجنة"
         sub="أوصاف من الكتاب والسنة، وكل وصف مربوط بتذكيرات عملية من فهرس المقامات."
       />
+
+      <section className="relative -mx-4 overflow-hidden sm:mx-0 sm:rounded-2xl">
+        <ParadiseScene lifetime={90} className="min-h-[56vh]" />
+        <div className="absolute inset-x-0 bottom-0 z-40 bg-foreground/70 px-5 py-5 text-background backdrop-blur-sm">
+          <h2 className="text-2xl font-bold">الجنة كما ورد وصفها في الكتاب والسنة</h2>
+          <p className="mt-2 text-sm leading-relaxed">تعرّف إلى أوصافها، ثم ادخل إلى صحبة إيمانية تتواصى بالخير ومكارم الأخلاق.</p>
+          <Link to="/community" className="mt-4 inline-flex min-h-11 items-center rounded-2xl bg-primary px-5 text-sm font-bold text-primary-foreground">دخول المجتمع الإيماني</Link>
+        </div>
+      </section>
+
+      <section className="grid gap-3 sm:grid-cols-2">
+        {[
+          ["جنات تجري من تحتها الأنهار", "خضرة وارفة، وظلال ممدودة، ورمان ونخيل، ونهر صافٍ."],
+          ["أنهار من ماء ولبن وعسل", "سرر مرفوعة من حرير أخضر، وفواكه دانية القطوف."],
+          ["أساور من ذهب ولؤلؤ وحرير", "آنية ذهبية، ولآلئ على سندس وإستبرق، أمام قصور بيضاء."],
+          ["قصور وكنوز الفردوس", "مدينة ذهبية، بأنهار وشلالات وبلّور يتلألأ."],
+        ].map(([title, text], index) => (
+          <Card key={title} className="space-y-2">
+            <p className="text-xs font-bold text-primary">المشهد {index + 1}</p>
+            <h2 className="text-lg font-bold">{title}</h2>
+            <p className="text-sm leading-relaxed text-muted-foreground">{text}</p>
+          </Card>
+        ))}
+      </section>
 
       <Note>
         هذه الأوصاف للترغيب والتحفيز، والتذكيرات المرتبطة ليست شرطاً ولا ضماناً — الجنة فضلٌ من
