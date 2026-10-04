@@ -193,7 +193,7 @@ function ReportPage() {
 
       {!user ? (
         <Note>
-          سجّل الدخول من صفحة <Link to="/auth" className="text-primary underline">حسابي</Link> ليُحفظ
+          سجّل الدخول من صفحة <Link to="/auth" search={{ redirect: "/report" }} className="text-primary underline">حسابي</Link> ليُحفظ
           تقريرك وتقدّمك على حسابك الخاص.
         </Note>
       ) : null}

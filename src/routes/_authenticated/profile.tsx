@@ -32,11 +32,14 @@ function ProfilePage() {
   }, [user]);
 
   async function save() {
-    if (!name.trim()) return;
+    if (!name.trim()) return undefined;
     setBusy(true);
     const { data, error } = await supabase.from("profiles").update({ display_name: name.trim(), bio: bio.trim(), interests: selected }).eq("id", user.id).select("id, display_name, avatar_url, bio, interests").single();
     setBusy(false);
-    if (error) return toast.error("تعذّر حفظ الملف");
+    if (error) {
+      toast.error("تعذّر حفظ الملف");
+      return;
+    }
     setProfile(data as MemberProfile);
     toast.success("حُفظ ملفك الشخصي");
   }
