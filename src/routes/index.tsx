@@ -17,15 +17,17 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "مساحة محاسبة ذاتية وإيمانية خاصة، للتذكير لا للحكم على أحد.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Home,
 });
 
 const quick = [
-  { to: "/deeds", label: "سجّل ذكراً", icon: "📿" },
-  { to: "/prayer", label: "الصلاة", icon: "🕌" },
-  { to: "/tadabbur", label: "وليدّبّروا", icon: "📖" },
+  { to: "/salawat", label: "الفرائض أولاً", icon: "🕌" },
+  { to: "/deeds", label: "افتح السبحة", icon: "📿" },
+  { to: "/quran", label: "افتح المصحف", icon: "📖" },
   { to: "/mercy", label: "لا تقنطوا", icon: "💧" },
   { to: "/tawbah", label: "التوبة والحقوق", icon: "🔒" },
   { to: "/sabr", label: "الصبر والعافية", icon: "🤍" },
