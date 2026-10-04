@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 
 import { Btn, Card, Note, PageTitle } from "@/components/bits";
+import { ParadiseScene, paradiseStage } from "@/components/paradise";
 import { ayat, groups } from "@/data/content";
 import { useDayLog, useLocalState } from "@/lib/store";
 
@@ -19,6 +20,8 @@ export const Route = createFileRoute("/quran")({
         property: "og:description",
         content: "اختيار الآيات وتسجيلها، مربوطة بفهرس المقامات وبجنة العائلة.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: QuranPage,
@@ -38,7 +41,7 @@ function QuranPage() {
   const { today, add, lifetimeById } = useDayLog();
   const [q, setQ] = useState("");
   const [picked, setPicked] = useLocalState<string[]>("quran-picked", []);
-  const [pages, setPages] = useState(1);
+  const [manual, setManual] = useState({ verses: 1, pages: 1, words: 1 });
 
   const list = useMemo(() => {
     const term = q.trim();
@@ -48,6 +51,13 @@ function QuranPage() {
 
   const todayQuran = (quranGroup?.items ?? []).reduce((n, i) => n + (today[i.id] ?? 0), 0);
   const lifeQuran = (quranGroup?.items ?? []).reduce((n, i) => n + (lifetimeById[i.id] ?? 0), 0);
+  const quranTotals = [
+    { id: "quran-verses", label: "آية", value: manual.verses, key: "verses" as const },
+    { id: "quran-pages", label: "صفحة", value: manual.pages, key: "pages" as const },
+    { id: "quran-words", label: "كلمة", value: manual.words, key: "words" as const },
+  ];
+  const quranLifetime = lifeQuran + quranTotals.reduce((sum, item) => sum + (lifetimeById[item.id] ?? 0), 0);
+  const stage = paradiseStage(quranLifetime);
 
   const toggle = (ref: string) =>
     setPicked((p) => (p.includes(ref) ? p.filter((x) => x !== ref) : [...p, ref]));
@@ -69,17 +79,24 @@ function QuranPage() {
           <span className="text-muted-foreground">التراكمي في مقام القرآن</span>
           <span className="font-bold">{lifeQuran}</span>
         </div>
-        <div className="flex flex-wrap items-center gap-2 border-t border-border pt-2">
-          <span className="text-xs text-muted-foreground">قرأت خارج التطبيق؟</span>
-          <input
-            type="number"
-            min={1}
-            value={pages}
-            onChange={(e) => setPages(Math.max(1, Number(e.target.value) || 1))}
-            className="h-10 w-20 rounded-2xl border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring/40"
-          />
-          <Btn onClick={() => add("quran-1", pages)}>أضف {pages} صفحة/ورد</Btn>
+        <div className="space-y-2 border-t border-border pt-3">
+          <p className="text-sm font-bold">مصحفك التراكمي</p>
+          <p className="text-xs text-muted-foreground">سجّل ما قرأته هنا أو من أي مصحف آخر.</p>
+          {quranTotals.map((item) => (
+            <div key={item.id} className="flex flex-wrap items-center gap-2">
+              <input type="number" min={1} value={item.value} aria-label={`عدد ${item.label}`}
+                onChange={(e) => setManual((current) => ({ ...current, [item.key]: Math.max(1, Number(e.target.value) || 1) }))}
+                className="h-10 w-20 rounded-2xl border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring/40" />
+              <Btn onClick={() => add(item.id, item.value)}>أضف {item.label}</Btn>
+              <span className="text-xs text-muted-foreground">اليوم {today[item.id] ?? 0} · تراكمي {lifetimeById[item.id] ?? 0}</span>
+            </div>
+          ))}
         </div>
+      </Card>
+
+      <Card className="overflow-hidden p-0">
+        <ParadiseScene lifetime={quranLifetime} />
+        <div className="p-4"><p className="font-bold">أثر وردك في الجنة الرمزية</p><p className="text-xs text-muted-foreground">{stage.label} · {quranLifetime} تسجيل تراكمي</p></div>
       </Card>
 
       <input

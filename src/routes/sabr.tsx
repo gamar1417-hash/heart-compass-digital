@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Btn, Card, Note, PageTitle, PrivateNote } from "@/components/bits";
+import { Btn, Card, Counter, Note, PageTitle, PrivateNote } from "@/components/bits";
 import { useDayLog, useLocalState } from "@/lib/store";
 
 export const Route = createFileRoute("/sabr")({
@@ -12,20 +12,22 @@ export const Route = createFileRoute("/sabr")({
       },
       { property: "og:title", content: "الصبر والعافية" },
       { property: "og:description", content: "مساحة رجاء ودعم عند المرض والهمّ والابتلاء." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Sabr,
 });
 
 const cards = [
-  { id: "marad", t: "المرض", d: "خذ بالعلاج، وارقِ نفسك، واسأل الله العافية.", icon: "🩺" },
-  { id: "hamm", t: "الهمّ والضيق", d: "«إنما أشكو بثّي وحزني إلى الله» — الشكوى إليه لا منه.", icon: "🌧️" },
-  { id: "musiba", t: "المصيبة", d: "اصبر عند الصدمة الأولى، والرجاء واسع.", icon: "🤍" },
-  { id: "wahda", t: "الوحشة", d: "تواصل مع من تثق به، والعزلة تطيل الألم.", icon: "🫂" },
+  { id: "marad", t: "أيام المرض", d: "ما يصيب المؤمن من وصب ولا نصب ولا سقم إلا كان سبباً للتكفير بإذن الله — متفق عليه.", icon: "🩺" },
+  { id: "hamm", t: "مرّات الهمّ", d: "حتى الهمّ داخل في حديث التكفير، مع الدعاء والأخذ بأسباب العافية.", icon: "🌧️" },
+  { id: "huzn", t: "مرّات الحزن", d: "﴿إنما أشكو بثّي وحزني إلى الله﴾ — الشكوى إليه لا منه.", icon: "🤍" },
+  { id: "alam", t: "مرّات الأوجاع", d: "حتى الشوكة يشاكها المؤمن يُرجى أن يكفّر الله بها من خطاياه — متفق عليه.", icon: "🫶" },
 ];
 
 function Sabr() {
-  const { today, add } = useDayLog();
+  const { today, add, lifetimeById } = useDayLog();
   const [note, setNote] = useLocalState("sabr-note", "");
   const [mood, setMood] = useLocalState("sabr-mood", 3);
 
@@ -44,16 +46,9 @@ function Sabr() {
 
       <div className="grid gap-2 sm:grid-cols-2">
         {cards.map((c) => (
-          <Card key={c.id} className="space-y-1">
-            <p className="font-semibold">
-              <span className="ml-2">{c.icon}</span>
-              {c.t}
-            </p>
-            <p className="text-xs leading-relaxed text-muted-foreground">{c.d}</p>
-            <Btn variant="ghost" onClick={() => add(`sabr-${c.id}`)}>
-              دعوت ورجوت ({today[`sabr-${c.id}`] ?? 0})
-            </Btn>
-          </Card>
+          <Counter key={c.id} label={`${c.icon} ${c.t}`} hint={c.d}
+            value={today[`sabr-${c.id}`] ?? 0} lifetime={lifetimeById[`sabr-${c.id}`] ?? 0}
+            onAdd={(n) => add(`sabr-${c.id}`, n)} />
         ))}
       </div>
 
@@ -84,7 +79,8 @@ function Sabr() {
       </Card>
 
       <Note>
-        لا نقرّر هنا أن مصيبة تُكفّر ذنباً بعينه؛ الأجر والتكفير بيد الله، ونحن نرجو رحمته.
+        هذه العدادات للتذكير بالصبر والرجاء وليست لعدّ المصائب أو تقدير التكفير؛ لا نقرّر أن ألماً
+        بعينه كفّر ذنباً بعينه، فذلك بيد الله. وطلب العلاج والمساندة من الأخذ بالأسباب.
       </Note>
     </div>
   );

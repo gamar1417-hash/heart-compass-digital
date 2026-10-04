@@ -46,23 +46,35 @@ function FriendsPage() {
 
   async function send(receiverId: string) {
     const existing = friendships.find((item) => (item.sender_id === user.id && item.receiver_id === receiverId) || (item.sender_id === receiverId && item.receiver_id === user.id));
-    if (existing) return toast.info(existing.status === "accepted" ? "أنتما صديقان بالفعل" : "طلب الصداقة قيد الانتظار");
+    if (existing) {
+      toast.info(existing.status === "accepted" ? "أنتما صديقان بالفعل" : "طلب الصداقة قيد الانتظار");
+      return;
+    }
     const { error } = await supabase.from("friendships").insert({ sender_id: user.id, receiver_id: receiverId });
-    if (error) return toast.error("تعذّر إرسال الطلب");
+    if (error) {
+      toast.error("تعذّر إرسال الطلب");
+      return;
+    }
     toast.success("أُرسل طلب الصداقة");
     await load();
   }
 
   async function accept(id: string) {
     const { error } = await supabase.from("friendships").update({ status: "accepted" }).eq("id", id);
-    if (error) return toast.error("تعذّر قبول الطلب");
+    if (error) {
+      toast.error("تعذّر قبول الطلب");
+      return;
+    }
     toast.success("تم قبول الصداقة");
     await load();
   }
 
   async function remove(id: string) {
     const { error } = await supabase.from("friendships").delete().eq("id", id);
-    if (error) return toast.error("تعذّر حذف الطلب");
+    if (error) {
+      toast.error("تعذّر حذف الطلب");
+      return;
+    }
     await load();
   }
 

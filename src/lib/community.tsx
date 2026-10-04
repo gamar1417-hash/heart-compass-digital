@@ -16,10 +16,10 @@ export async function ensureProfile(user: {
   const metadata = user.user_metadata ?? {};
   const fallback = user.email?.split("@")[0] || "عضو جديد";
   const displayName =
-    (typeof metadata.full_name === "string" && metadata.full_name.trim()) ||
-    (typeof metadata.name === "string" && metadata.name.trim()) ||
+    (typeof metadata["full_name"] === "string" && metadata["full_name"].trim()) ||
+    (typeof metadata["name"] === "string" && metadata["name"].trim()) ||
     fallback;
-  const avatarUrl = typeof metadata.avatar_url === "string" ? metadata.avatar_url : null;
+  const avatarUrl = typeof metadata["avatar_url"] === "string" ? metadata["avatar_url"] : null;
 
   const { data, error } = await supabase
     .from("profiles")
@@ -43,7 +43,7 @@ export async function getProfiles(ids: string[]) {
   return new Map((data as MemberProfile[]).map((profile) => [profile.id, profile]));
 }
 
-export function MemberAvatar({ profile, size = "md" }: { profile?: MemberProfile; size?: "sm" | "md" | "lg" }) {
+export function MemberAvatar({ profile, size = "md" }: { profile?: MemberProfile | undefined; size?: "sm" | "md" | "lg" }) {
   const box = size === "lg" ? "size-20 text-2xl" : size === "sm" ? "size-9 text-sm" : "size-11 text-base";
   const initial = profile?.display_name.trim().charAt(0) || "؟";
   return profile?.avatar_url ? (

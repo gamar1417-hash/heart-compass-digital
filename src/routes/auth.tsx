@@ -8,7 +8,7 @@ import { useSession } from "@/lib/cloud";
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (search: Record<string, unknown>) => ({
-    redirect: typeof search.redirect === "string" && search.redirect.startsWith("/") && !search.redirect.startsWith("//") ? search.redirect : "/community",
+    redirect: typeof search["redirect"] === "string" && search["redirect"].startsWith("/") && !search["redirect"].startsWith("//") ? search["redirect"] : "/community",
   }),
   head: () => ({
     meta: [

@@ -82,7 +82,7 @@ function CommunityPage() {
 
   async function publish() {
     const clean = body.trim();
-    if (clean.length < 3) return;
+    if (clean.length < 3) return undefined;
     setBusy(true);
     const { error } = await supabase.from("community_posts").insert({
       author_id: user.id,
@@ -91,7 +91,10 @@ function CommunityPage() {
       linked_path: linkedPath || null,
     });
     setBusy(false);
-    if (error) return toast.error("تعذّر نشر التذكير");
+    if (error) {
+      toast.error("تعذّر نشر التذكير");
+      return;
+    }
     setBody("");
     setLinkedPath("");
     toast.success("نُشر التذكير");
@@ -103,22 +106,31 @@ function CommunityPage() {
     const result = liked
       ? await supabase.from("community_likes").delete().eq("post_id", postId).eq("user_id", user.id)
       : await supabase.from("community_likes").insert({ post_id: postId, user_id: user.id });
-    if (result.error) return toast.error("تعذّر تحديث الإعجاب");
+    if (result.error) {
+      toast.error("تعذّر تحديث الإعجاب");
+      return;
+    }
     await load();
   }
 
   async function addComment(postId: string) {
     const text = commentDrafts[postId]?.trim();
-    if (!text) return;
+    if (!text) return undefined;
     const { error } = await supabase.from("community_comments").insert({ post_id: postId, author_id: user.id, body: text });
-    if (error) return toast.error("تعذّر إضافة التعليق");
+    if (error) {
+      toast.error("تعذّر إضافة التعليق");
+      return;
+    }
     setCommentDrafts((current) => ({ ...current, [postId]: "" }));
     await load();
   }
 
   async function reportPost(postId: string) {
     const { error } = await supabase.from("community_reports").insert({ reporter_id: user.id, post_id: postId, reason: "inappropriate" });
-    if (error) return toast.info("سبق أن أرسلت بلاغاً عن هذا المنشور");
+    if (error) {
+      toast.info("سبق أن أرسلت بلاغاً عن هذا المنشور");
+      return;
+    }
     toast.success("وصل البلاغ للمراجعة، شكراً لك");
   }
 

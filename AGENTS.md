@@ -11,3 +11,4 @@
 
 - Keep the faith community under the `_authenticated` route layout because member profiles, friendships, and posts are private to signed-in members.
 - Keep private worship logs separate from community data because friends must never see individual accountability or achievement details.
+- Treat worship counts as private motivational records, never as calculated reward or proof of acceptance, because divine reward cannot be quantified by the app.

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Btn, Card, Counter, Note, PageTitle, PrivateNote, ShareReminder } from "@/components/bits";
 import { counterVirtue } from "@/data/content";
 import { useDayLog, useLocalState } from "@/lib/store";
+import { ParadiseScene, paradiseStage } from "@/components/paradise";
 
 export const Route = createFileRoute("/deeds")({
   head: () => ({
@@ -15,6 +16,8 @@ export const Route = createFileRoute("/deeds")({
       },
       { property: "og:title", content: "أعمالي وأذكاري" },
       { property: "og:description", content: "سجّل ذكرك وأعمالك يومياً وتراكمياً بخصوصية كاملة." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Deeds,
@@ -78,6 +81,9 @@ function Deeds() {
     .filter((d) => d.entries.length > 0)
     .sort((a, b) => (a.day < b.day ? 1 : -1));
   const shownDays = showAllDays ? days : days.slice(0, 7);
+  const stage = paradiseStage(lifetimeTotal);
+  const tasbih = counters.filter((counter) => ["hawqala", "istighfar", "salat-nabi"].includes(counter.id));
+  const otherCounters = counters.filter((counter) => !tasbih.some((item) => item.id === counter.id));
 
   return (
     <div className="space-y-4">
@@ -88,6 +94,30 @@ function Deeds() {
       />
 
       <Note>جودة النيّة لا يعرفها إلا الله؛ العدّاد يقيس المداومة لا القبول ولا الأجر.</Note>
+
+      <section className="space-y-2">
+        <div className="flex items-end justify-between gap-2">
+          <div>
+            <p className="text-xs font-bold text-primary">السبحة</p>
+            <h2 className="text-xl font-bold">ذكرٌ يبني المشهد أولاً بأول</h2>
+          </div>
+          <span aria-hidden="true" className="text-3xl">↙</span>
+        </div>
+        <div className="grid gap-2">
+          {tasbih.map((c) => (
+            <Counter key={c.id} label={c.label} hint={c.hint} value={today[c.id] ?? 0}
+              lifetime={lifetimeById[c.id] ?? 0} virtue={counterVirtue[c.id]} onAdd={(n) => add(c.id, n)} />
+          ))}
+        </div>
+      </section>
+
+      <Card className="overflow-hidden p-0">
+        <ParadiseScene lifetime={lifetimeTotal} />
+        <div className="flex items-center justify-between gap-3 p-4">
+          <div><p className="font-bold">{stage.label}</p><p className="text-xs text-muted-foreground">تتجدّد فوراً · {lifetimeTotal} تسجيل تراكمي</p></div>
+          <span className="text-2xl">🌴</span>
+        </div>
+      </Card>
 
       <div className="grid grid-cols-2 gap-2">
         <Card className="space-y-1 text-center">
@@ -103,7 +133,7 @@ function Deeds() {
       </div>
 
       <div className="grid gap-2">
-        {counters.map((c) => (
+        {otherCounters.map((c) => (
           <Counter
             key={c.id}
             label={c.label}

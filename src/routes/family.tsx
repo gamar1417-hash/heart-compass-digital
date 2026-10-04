@@ -181,7 +181,7 @@ function FamilyPage() {
         <PageTitle emoji="🏡" title="العائلة" sub="جنة واحدة تنمو بأعمال كل فرد." />
         <Card className="space-y-2 text-center">
           <p className="text-sm">لربط حسابات أسرتك، سجّل الدخول أولاً.</p>
-          <Link to="/auth" className="inline-block text-sm text-primary underline">
+          <Link to="/auth" search={{ redirect: "/family" }} className="inline-block text-sm text-primary underline">
             الذهاب إلى حسابي
           </Link>
         </Card>
