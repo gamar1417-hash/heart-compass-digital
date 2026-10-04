@@ -1,6 +1,9 @@
-# Roadmap
-
 - [x] Keep Paradise descriptions publicly accessible.
 - [x] Add protected member profiles and friendships.
 - [x] Add the faith community feed, comments, likes, and reports.
 - [x] Keep private worship logs out of community profiles.
+- [ ] Prioritize obligatory prayers and add sourced prayer virtue cards.
+- [ ] Add a prominent tasbih with hawqala, istighfar, and salawat plus manual entry.
+- [ ] Expand Quran tracking to verses, pages, and words with manual entry.
+- [ ] Connect all new private counters to the cumulative Paradise scene.
+- [ ] Add illness, worry, sadness, and pain counters with gentle doctrinal wording.
