@@ -18,6 +18,7 @@ import { Route as FadlRouteImport } from './routes/fadl'
 import { Route as FamilyRouteImport } from './routes/family'
 import { Route as FarmRouteImport } from './routes/farm'
 import { Route as FeedbackRouteImport } from './routes/feedback'
+import { Route as JannahRouteImport } from './routes/jannah'
 import { Route as MaqamatRouteImport } from './routes/maqamat'
 import { Route as MercyRouteImport } from './routes/mercy'
 import { Route as PrayerRouteImport } from './routes/prayer'
@@ -75,6 +76,11 @@ const FarmRoute = FarmRouteImport.update({
 const FeedbackRoute = FeedbackRouteImport.update({
   id: '/feedback',
   path: '/feedback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JannahRoute = JannahRouteImport.update({
+  id: '/jannah',
+  path: '/jannah',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MaqamatRoute = MaqamatRouteImport.update({
@@ -157,6 +163,7 @@ export interface FileRoutesByFullPath {
   '/family': typeof FamilyRoute
   '/farm': typeof FarmRoute
   '/feedback': typeof FeedbackRoute
+  '/jannah': typeof JannahRoute
   '/maqamat': typeof MaqamatRoute
   '/mercy': typeof MercyRoute
   '/prayer': typeof PrayerRoute
@@ -181,6 +188,7 @@ export interface FileRoutesByTo {
   '/family': typeof FamilyRoute
   '/farm': typeof FarmRoute
   '/feedback': typeof FeedbackRoute
+  '/jannah': typeof JannahRoute
   '/maqamat': typeof MaqamatRoute
   '/mercy': typeof MercyRoute
   '/prayer': typeof PrayerRoute
@@ -207,6 +215,7 @@ export interface FileRoutesById {
   '/family': typeof FamilyRoute
   '/farm': typeof FarmRoute
   '/feedback': typeof FeedbackRoute
+  '/jannah': typeof JannahRoute
   '/maqamat': typeof MaqamatRoute
   '/mercy': typeof MercyRoute
   '/prayer': typeof PrayerRoute
@@ -233,6 +242,7 @@ export interface FileRouteTypes {
     | '/family'
     | '/farm'
     | '/feedback'
+    | '/jannah'
     | '/maqamat'
     | '/mercy'
     | '/prayer'
@@ -257,6 +267,7 @@ export interface FileRouteTypes {
     | '/family'
     | '/farm'
     | '/feedback'
+    | '/jannah'
     | '/maqamat'
     | '/mercy'
     | '/prayer'
@@ -282,6 +293,7 @@ export interface FileRouteTypes {
     | '/family'
     | '/farm'
     | '/feedback'
+    | '/jannah'
     | '/maqamat'
     | '/mercy'
     | '/prayer'
@@ -308,6 +320,7 @@ export interface RootRouteChildren {
   FamilyRoute: typeof FamilyRoute
   FarmRoute: typeof FarmRoute
   FeedbackRoute: typeof FeedbackRoute
+  JannahRoute: typeof JannahRoute
   MaqamatRoute: typeof MaqamatRoute
   MercyRoute: typeof MercyRoute
   PrayerRoute: typeof PrayerRoute
@@ -384,6 +397,13 @@ declare module '@tanstack/react-router' {
       path: '/feedback'
       fullPath: '/feedback'
       preLoaderRoute: typeof FeedbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jannah': {
+      id: '/jannah'
+      path: '/jannah'
+      fullPath: '/jannah'
+      preLoaderRoute: typeof JannahRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/maqamat': {
@@ -512,6 +532,7 @@ const rootRouteChildren: RootRouteChildren = {
   FamilyRoute: FamilyRoute,
   FarmRoute: FarmRoute,
   FeedbackRoute: FeedbackRoute,
+  JannahRoute: JannahRoute,
   MaqamatRoute: MaqamatRoute,
   MercyRoute: MercyRoute,
   PrayerRoute: PrayerRoute,

@@ -116,6 +116,7 @@ function RootShell({ children }: { children: ReactNode }) {
 
 const nav = [
   { to: "/", label: "الرئيسية", icon: "🏠" },
+  { to: "/jannah", label: "جنتي", icon: "🌿" },
   { to: "/farm", label: "المزرعة", icon: "🌴" },
   { to: "/deeds", label: "أعمالي", icon: "📿" },
   { to: "/maqamat", label: "المقامات", icon: "🧭" },
