@@ -102,7 +102,7 @@ export function ParadiseScene({
   return (
     <div
       ref={ref}
-      className={`relative w-full overflow-hidden ${tall ? "h-full min-h-[60vh]" : "aspect-[16/10] sm:aspect-[16/9]"} ${className}`}
+      className={`relative w-full overflow-hidden ${tall ? "h-full min-h-[70svh]" : "aspect-[4/5] min-h-[22rem] sm:aspect-[16/9] sm:min-h-0"} ${className}`}
       style={{ perspective: "1100px", perspectiveOrigin: "50% 45%" }}
       role="img"
       aria-label="مشهد جنة ثلاثي الأبعاد يتّسع مع تراكم الأعمال"
