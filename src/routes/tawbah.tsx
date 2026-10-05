@@ -76,9 +76,27 @@ function Tawbah() {
               أحتاج للتعلّم
             </Btn>
             {learn === s.t ? (
-              <p className="rounded-2xl bg-secondary p-3 text-xs leading-relaxed">
-                {s.learn} — هذه مادة توعوية عامة للتذكير، وليست فتوى ولا تشخيصاً لحالتك.
-              </p>
+              <div className="space-y-2 rounded-2xl bg-secondary p-3">
+                <p className="text-xs font-semibold">مراجع توعوية موثوقة (تفتح في صفحة جديدة):</p>
+                <ul className="space-y-1.5">
+                  {s.refs.map((ref) => (
+                    <li key={ref.url}>
+                      <a
+                        href={ref.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block rounded-xl bg-background px-3 py-2 text-xs font-semibold text-primary underline-offset-4 hover:underline"
+                      >
+                        🔗 {ref.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-[11px] leading-relaxed text-muted-foreground">
+                  هذه روابط توعوية عامة للتعلّم، وليست فتوى ولا تشخيصاً لحالتك؛ ولحالتك الخاصة اسأل
+                  عالماً موثوقاً.
+                </p>
+              </div>
             ) : null}
           </Card>
         ))}
