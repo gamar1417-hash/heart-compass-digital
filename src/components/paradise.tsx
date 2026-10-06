@@ -95,9 +95,7 @@ export function ParadiseScene({
     transition: "transform 380ms cubic-bezier(.2,.7,.2,1)",
   });
 
-  const sparkCount = Math.min(46, 8 + c.jewels);
-  const palmCount = Math.min(18, c.palms);
-  const palaceCount = Math.min(6, c.palaces);
+  const sparkCount = Math.min(24, 6 + Math.floor(c.jewels / 2));
 
   return (
     <div
@@ -137,56 +135,6 @@ export function ParadiseScene({
             "linear-gradient(to top, transparent 55%, oklch(0.95 0.05 150 / 0.18) 100%)",
         }}
       />
-
-      {/* نخيل أمامي يزداد عدده بتراكم الأعمال (طبقة قريبة تعطي إحساس العمق) */}
-      <div
-        className="pointer-events-none absolute inset-0 z-30"
-        style={{ transformStyle: "preserve-3d", ...layer(1.5) }}
-      >
-        {Array.from({ length: palmCount }).map((_, i) => {
-          const left = (i * 61) % 98;
-          const near = i % 3 === 0;
-          return (
-            <span
-              key={i}
-              className="absolute select-none"
-              style={{
-                left: `${left}%`,
-                bottom: near ? "-4%" : "6%",
-                fontSize: near ? `${52 + g * 26}px` : `${28 + g * 14}px`,
-                filter: near
-                  ? "drop-shadow(0 8px 14px rgba(0,0,0,.35))"
-                  : "blur(0.6px) drop-shadow(0 4px 8px rgba(0,0,0,.25))",
-                opacity: near ? 0.95 : 0.75,
-              }}
-            >
-              🌴
-            </span>
-          );
-        })}
-      </div>
-
-      {/* قصور بعيدة تظهر تدريجياً */}
-      <div
-        className="pointer-events-none absolute inset-0 z-20"
-        style={{ transformStyle: "preserve-3d", ...layer(0.6) }}
-      >
-        {Array.from({ length: palaceCount }).map((_, i) => (
-          <span
-            key={i}
-            className="absolute select-none"
-            style={{
-              left: `${8 + i * 15}%`,
-              top: `${30 + ((i * 7) % 9)}%`,
-              fontSize: `${20 + g * 12}px`,
-              opacity: 0.85,
-              filter: "drop-shadow(0 4px 10px rgba(0,0,0,.3))",
-            }}
-          >
-            🏰
-          </span>
-        ))}
-      </div>
 
       {/* لمعان الثمار كالجواهر */}
       <div
