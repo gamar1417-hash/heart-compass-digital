@@ -73,6 +73,8 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
+      { name: "theme-color", content: "#2f5d3a" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "حاسبوا أنفسكم — مساحة محاسبة ذاتية" },
