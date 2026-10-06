@@ -7,6 +7,7 @@ import { useSession } from "@/lib/cloud";
 import { useDayLog } from "@/lib/store";
 import { TRACKS, trackTotals } from "@/lib/family";
 import { enableFamilyNotifications } from "@/lib/family-notify";
+import { FamilyInsight } from "@/components/family-insight";
 import { paradiseCounts, paradiseStage, ParadiseScene } from "@/components/paradise";
 
 export const Route = createFileRoute("/family")({
@@ -293,6 +294,18 @@ function FamilyPage() {
             </Btn>
             {msg ? <Note>{msg}</Note> : null}
           </Card>
+
+          <FamilyInsight
+            total={familyLifetime}
+            today={familyToday}
+            stage={stage.label}
+            nextAt={stage.next}
+            members={rows.length || 1}
+            tracks={TRACKS.map((t) => ({
+              name: t.name,
+              total: rows.reduce((a, r) => a + (r[`track_${t.id}` as "track_nafs"] ?? 0), 0),
+            }))}
+          />
 
           <Card className="space-y-2">
             <h2 className="font-bold">مسارات العائلة</h2>
