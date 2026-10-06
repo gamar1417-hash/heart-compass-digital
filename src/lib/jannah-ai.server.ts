@@ -29,7 +29,7 @@ export async function analyzeFamilyJannah(input: {
   members: number;
   tracks: { name: string; total: number }[];
 }) {
-  const apiKey = process.env.LOVABLE_API_KEY;
+  const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) throw new Error("خدمة الذكاء غير مهيأة.");
   const provider = createOpenAI({
     baseURL: "https://ai.gateway.lovable.dev/v1",
