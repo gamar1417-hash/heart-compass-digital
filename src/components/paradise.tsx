@@ -1,5 +1,5 @@
  import React, { useState } from 'react';
-import { Sparkles, Castle, Compass, Volume2, Utensils, Award, Gem, Trees, Waves, Crown } from 'lucide-react';
+import { Utensils, Crown } from 'lucide-react';
 
 interface ParadiseProps {
   points?: number;
@@ -25,7 +25,6 @@ export function paradiseStage(points: number = 0): number {
 
 export function Paradise({ points = 350 }: ParadiseProps) {
   const counts = paradiseCounts(points);
-  const stage = paradiseStage(points);
   const [activeTab, setActiveTab] = useState<'entrance' | 'hall' | 'majlis' | 'banquet' | 'service'>('entrance');
   const [showServiceWheel, setShowServiceWheel] = useState(false);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
@@ -33,32 +32,27 @@ export function Paradise({ points = 350 }: ParadiseProps) {
   const sections = {
     entrance: {
       title: "المدخل الملكي: ﴿ سَلَامٌ عَلَيْكُمْ بِمَا صَبَرْتُمْ فَنِعْمَ عُقْبَى الدَّارِ ﴾",
-      bg: "from-amber-950 via-emerald-950 to-black",
-      glow: "shadow-[inset_0_0_80px_rgba(251,191,36,0.3)]",
+      bgImage: "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?q=80&w=1000&auto=format&fit=crop",
       desc: "بوابات شاهقة من الذهب الخالص واللؤلؤ المنظوم تفتح ذراعيها لاستقبال الأبرار.",
     },
     hall: {
-      title: "البهو الأسطوري: قصور من ذهب وفضة وأعمدة زبرجد",
-      bg: "from-amber-900 via-yellow-950 to-neutral-950",
-      glow: "shadow-[inset_0_0_80px_rgba(234,179,8,0.4)]",
-      desc: "أروقة ممتدة وقصور منيفه تطل على رياض خضراء وأنهار خمر ولبن وعسل.",
+      title: "البهو الأسطوري: قصور من ذهب وفضة وأعمدة لؤلؤية",
+      bgImage: "https://images.unsplash.com/photo-1541971875076-8f970d573be6?q=80&w=1000&auto=format&fit=crop",
+      desc: "أروقة ممتدة وقصور منيفة تطل على رياض خضراء وأنهار خمر ولبن وعسل.",
     },
     majlis: {
       title: "مجلس الأرائك: ﴿ مُتَّكِئِينَ عَلَى رُفْرُفٍ خُضْرٍ وَعَبْقَرِيٍّ حِسَانٍ ﴾",
-      bg: "from-emerald-950 via-teal-950 to-neutral-950",
-      glow: "shadow-[inset_0_0_80px_rgba(16,185,129,0.4)]",
-      desc: "فُرش وثيرة وأرائك مرصعة بالدر والياقوت تريح القلوب وتنعش الابصار.",
+      bgImage: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop",
+      desc: "فُرش وثيرة وأرائك مرصعة بالدر والياقوت تريح القلوب وتنعش الأبصار.",
     },
     banquet: {
-      title: "قاعة الولائم الكبرى: ﴿ يُطَافُ عَلَيْهِمْ بِصِحَافٍ مِنْ ذهبٍ وَأَكْوَابٍ ﴾",
-      bg: "from-orange-950 via-amber-950 to-black",
-      glow: "shadow-[inset_0_0_80px_rgba(249,115,22,0.4)]",
+      title: "قاعة الولائم الكبرى: ﴿ يُطَافُ عَلَيْهِمْ بِصِحَافٍ مِنْ ذَهَبٍ وَأَكْوَابٍ ﴾",
+      bgImage: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1000&auto=format&fit=crop",
       desc: "موائد عامرة بما تشتهيه الأنفس وتلذ الأعين من أطايب الطعام والشراب.",
     },
     service: {
       title: "دائرة الخدمة السماوية: ماذا تشتهي؟",
-      bg: "from-yellow-900 via-amber-950 to-neutral-950",
-      glow: "shadow-[inset_0_0_80px_rgba(250,204,21,0.5)]",
+      bgImage: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1000&auto=format&fit=crop",
       desc: "اطلب ما شئت من نعيم مقيم: (لحم طير، فاكهة، كأس من معين، شراب طهور).",
     }
   };
@@ -66,73 +60,68 @@ export function Paradise({ points = 350 }: ParadiseProps) {
   const current = sections[activeTab];
 
   return (
-    <div className="relative w-full max-w-xl mx-auto rounded-3xl overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] bg-neutral-950 border-2 border-amber-500/50 text-white font-sans">
+    <div className="relative w-full max-w-xl mx-auto rounded-3xl overflow-hidden shadow-2xl border-2 border-amber-500/60 text-white font-sans bg-black">
       
-      {/* شريط الإحصائيات العلوي الملكي المتوهج */}
-      <div className="absolute top-0 inset-x-0 z-30 bg-gradient-to-b from-black/90 via-black/70 to-transparent backdrop-blur-md p-4 border-b border-amber-500/20 flex flex-col gap-2">
+      {/* شريط الإحصائيات العلوي */}
+      <div className="absolute top-0 inset-x-0 z-30 bg-black/85 backdrop-blur-md p-4 border-b border-amber-500/30 flex flex-col gap-2">
         <div className="flex justify-between items-center text-xs px-2 text-amber-300 font-bold tracking-wider">
-          <span className="flex items-center gap-1"><Crown className="w-4 h-4 text-amber-400 animate-bounce" /> رصيد الغراس: {points} نقطة</span>
-          <span className="bg-amber-500/20 border border-amber-400/50 px-2.5 py-0.5 rounded-full text-amber-200">
+          <span className="flex items-center gap-1"><Crown className="w-4 h-4 text-amber-400" /> رصيد الغراس: {points} نقطة</span>
+          <span className="bg-amber-500/30 border border-amber-400 px-2.5 py-0.5 rounded-full text-amber-200">
             قصور: {counts.palaces} | خدمات: {counts.services}
           </span>
         </div>
         
-        {/* شريط التقدم الفاخر */}
         <div className="flex gap-1.5 justify-center px-2">
           {[1, 2, 3, 4, 5, 6, 7, 8].map((s, idx) => (
-            <div key={idx} className={`h-2 flex-1 rounded-full transition-all duration-500 ${idx < counts.palaces ? 'bg-gradient-to-r from-amber-400 to-yellow-300 shadow-[0_0_12px_rgba(251,191,36,0.9)] scale-y-110' : 'bg-white/10'}`}></div>
+            <div key={idx} className={`h-2 flex-1 rounded-full transition-all duration-500 ${idx < counts.palaces ? 'bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.9)]' : 'bg-white/20'}`}></div>
           ))}
         </div>
-        <div className="text-[11px] text-center text-amber-200/90 font-medium tracking-wide flex items-center justify-center gap-1">
-          <Sparkles className="w-3.5 h-3.5 text-amber-400" /> مرحلة الفردوس الأعلى - تتضاعف بالعمل الصالح <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+        <div className="text-[11px] text-center text-amber-200 font-medium">
+          ✨ مرحلة الفردوس الأعلى - تتضاعف بالعمل الصالح
         </div>
       </div>
 
-      {/* خلفية المشهد البصري الأسطوري المتحرك */}
-      <div className={`relative h-[480px] w-full bg-gradient-to-b ${current.bg} ${current.glow} flex flex-col justify-end p-6 transition-all duration-700 overflow-hidden`}>
+      {/* خلفية المشهد البصري */}
+      <div className="relative h-[500px] w-full flex flex-col justify-end p-6 overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center transition-all duration-700 filter brightness-75"
+          style={{ backgroundImage: `url(${current.bgImage})` }}
+        ></div>
         
-        {/* خلفيات بصرية ثلاثية الأبعاد تنبض بالحياة */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-50 pointer-events-none scale-110 transition-transform duration-1000">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.15)_0%,transparent_70%)] animate-pulse"></div>
-          <Castle className="w-96 h-96 text-amber-300/80 drop-shadow-[0_0_35px_rgba(251,191,36,0.6)] animate-pulse" />
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/60"></div>
 
-        {/* صندوق النصوص والآيات القرآنية الساحرة */}
-        <div className="relative z-20 bg-neutral-900/85 backdrop-blur-xl p-5 rounded-3xl border border-amber-400/50 text-center mb-16 shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-neutral-950 font-black text-[10px] px-3 py-0.5 rounded-full uppercase tracking-wider shadow">
-            مشهد تفاعلي فخم
-          </div>
-          <h3 className="text-xs sm:text-sm font-extrabold text-amber-300 mb-2 leading-relaxed">{current.title}</h3>
+        {/* صندوق النصوص والآيات */}
+        <div className="relative z-20 bg-neutral-950/85 backdrop-blur-md p-4 rounded-2xl border border-amber-400/60 text-center mb-16 shadow-2xl">
+          <h3 className="text-xs sm:text-sm font-extrabold text-amber-300 mb-1.5 leading-relaxed">{current.title}</h3>
           <p className="text-[11px] text-gray-200 leading-relaxed font-light">{current.desc}</p>
           {selectedItem && (
-            <div className="mt-3 text-xs bg-gradient-to-r from-amber-500/30 to-emerald-500/30 border border-amber-400 py-1.5 px-4 rounded-full text-amber-200 inline-block font-bold animate-bounce shadow">
-              ✨ تم استيفاء ضيافة: {selectedItem} بنجاح تام
+            <div className="mt-2 text-xs bg-amber-500/30 border border-amber-400 py-1 px-3 rounded-full text-amber-200 inline-block font-bold">
+              ✨ تم تقديم الضيافة: {selectedItem}
             </div>
           )}
         </div>
 
-        {/* دائرة الخدمة المنبثقة الأسطورية */}
+        {/* دائرة الخدمة */}
         {showServiceWheel && (
-          <div className="absolute inset-0 z-40 bg-black/95 backdrop-blur-2xl flex flex-col items-center justify-center p-6 text-center animate-fade-in">
-            <div className="relative w-72 h-72 rounded-full border-4 border-amber-400/80 flex items-center justify-center bg-gradient-to-b from-amber-950/80 to-neutral-950 shadow-[0_0_50px_rgba(251,191,36,0.5)]">
-              <div className="absolute text-center text-amber-300 font-extrabold text-sm drop-shadow">
-                ماذا تشتهي من نعيم؟<br/><span className="text-[10px] text-amber-100/70 font-normal">اختر ما لذ وطاب</span>
+          <div className="absolute inset-0 z-40 bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center p-6 text-center">
+            <div className="relative w-72 h-72 rounded-full border-4 border-amber-400 flex items-center justify-center bg-black/90 shadow-[0_0_40px_rgba(251,191,36,0.5)]">
+              <div className="absolute text-center text-amber-300 font-bold text-sm">
+                ماذا تشتهي من نعيم؟<br/><span className="text-[10px] text-gray-300">اختر ما لذ وطاب</span>
               </div>
               
-              {/* أزرار الدائرة التفاعلية المحيطة */}
               {[
                 { label: 'لحم طير مشوي 🍗', angle: 'top-3 left-1/2 -translate-x-1/2' },
                 { label: 'فاكهة دانية 🍎', angle: 'top-12 right-10' },
                 { label: 'كأس من معين 💎', angle: 'top-1/2 right-3 -translate-y-1/2' },
                 { label: 'شراب طهور 🍷', angle: 'bottom-12 right-10' },
-                { label: 'عسل ولبن مصفى 🍯', angle: 'bottom-3 left-1/2 -translate-x-1/2' },
+                { label: 'عسل ولبن 🍯', angle: 'bottom-3 left-1/2 -translate-x-1/2' },
                 { label: 'سندس واستبرق 👗', angle: 'bottom-12 left-10' },
-                { label: 'أساور من لؤلؤ 💍', angle: 'top-1/2 left-3 -translate-y-1/2' },
+                { label: 'أساور لؤلؤ 💍', angle: 'top-1/2 left-3 -translate-y-1/2' },
               ].map((item, i) => (
                 <button
                   key={i}
                   onClick={() => { setSelectedItem(item.label); setShowServiceWheel(false); }}
-                  className={`absolute ${item.angle} bg-amber-500/25 hover:bg-amber-400 hover:text-neutral-950 text-amber-100 text-[10px] px-3 py-1.5 rounded-full border border-amber-300/70 transition-all font-bold shadow-lg scale-100 hover:scale-110`}
+                  className={`absolute ${item.angle} bg-amber-500/30 hover:bg-amber-400 hover:text-black text-amber-100 text-[10px] px-3 py-1.5 rounded-full border border-amber-300 transition font-bold shadow`}
                 >
                   {item.label}
                 </button>
@@ -140,42 +129,42 @@ export function Paradise({ points = 350 }: ParadiseProps) {
             </div>
             <button 
               onClick={() => setShowServiceWheel(false)}
-              className="mt-8 bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 px-8 py-2.5 rounded-full text-xs font-bold text-white shadow-xl transition-all"
+              className="mt-6 bg-red-600 hover:bg-red-500 px-6 py-2 rounded-full text-xs font-bold text-white shadow"
             >
               إغلاق الدائرة
             </button>
           </div>
         )}
 
-        {/* الأزرار السفلية الفخمة المطابقة لفيديو Base 44 */}
+        {/* الأزرار السفلية */}
         <div className="absolute bottom-4 inset-x-4 z-30 flex gap-2 overflow-x-auto pb-1 no-scrollbar">
           <button 
             onClick={() => { setActiveTab('entrance'); setSelectedItem(null); }}
-            className={`px-4 py-2.5 rounded-2xl text-xs font-extrabold whitespace-nowrap transition-all ${activeTab === 'entrance' ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-neutral-950 shadow-[0_0_20px_rgba(251,191,36,0.8)] scale-105' : 'bg-neutral-900/80 text-white border border-white/20 hover:bg-neutral-800'}`}
+            className={`px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition ${activeTab === 'entrance' ? 'bg-amber-500 text-black shadow-lg scale-105' : 'bg-black/70 text-white border border-white/20'}`}
           >
             المدخل
           </button>
           <button 
             onClick={() => { setActiveTab('hall'); setSelectedItem(null); }}
-            className={`px-4 py-2.5 rounded-2xl text-xs font-extrabold whitespace-nowrap transition-all ${activeTab === 'hall' ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-neutral-950 shadow-[0_0_20px_rgba(251,191,36,0.8)] scale-105' : 'bg-neutral-900/80 text-white border border-white/20 hover:bg-neutral-800'}`}
+            className={`px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition ${activeTab === 'hall' ? 'bg-amber-500 text-black shadow-lg scale-105' : 'bg-black/70 text-white border border-white/20'}`}
           >
             البهو
           </button>
           <button 
             onClick={() => { setActiveTab('majlis'); setSelectedItem(null); }}
-            className={`px-4 py-2.5 rounded-2xl text-xs font-extrabold whitespace-nowrap transition-all ${activeTab === 'majlis' ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-neutral-950 shadow-[0_0_20px_rgba(251,191,36,0.8)] scale-105' : 'bg-neutral-900/80 text-white border border-white/20 hover:bg-neutral-800'}`}
+            className={`px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition ${activeTab === 'majlis' ? 'bg-amber-500 text-black shadow-lg scale-105' : 'bg-black/70 text-white border border-white/20'}`}
           >
             مجلس الأرائك
           </button>
           <button 
             onClick={() => { setActiveTab('banquet'); setSelectedItem(null); }}
-            className={`px-4 py-2.5 rounded-2xl text-xs font-extrabold whitespace-nowrap transition-all ${activeTab === 'banquet' ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-neutral-950 shadow-[0_0_20px_rgba(251,191,36,0.8)] scale-105' : 'bg-neutral-900/80 text-white border border-white/20 hover:bg-neutral-800'}`}
+            className={`px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition ${activeTab === 'banquet' ? 'bg-amber-500 text-black shadow-lg scale-105' : 'bg-black/70 text-white border border-white/20'}`}
           >
             قاعة الولائم
           </button>
           <button 
             onClick={() => { setShowServiceWheel(true); }}
-            className="px-4 py-2.5 rounded-2xl text-xs font-extrabold whitespace-nowrap bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.8)] flex items-center gap-1.5 animate-pulse scale-105"
+            className="px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg flex items-center gap-1.5 animate-pulse"
           >
             <Utensils className="w-4 h-4" /> دائرة الخدمة
           </button>
