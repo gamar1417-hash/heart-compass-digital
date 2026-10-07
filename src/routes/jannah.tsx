@@ -1,9 +1,13 @@
  import React from 'react';
-import { useStore } from '../lib/store';
+import { createFileRoute } from '@tanstack/react-router';
+import { useDayLog } from '../lib/store';
 import Paradise from '../components/paradise';
 
+export const Route = createFileRoute('/jannah')({
+  component: Jannah,
+});
+
 export default function Jannah() {
-  const { useDayLog } = useStore();
   const { lifetimeTotal } = useDayLog();
 
   return (
