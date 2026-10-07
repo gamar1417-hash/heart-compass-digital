@@ -74,3 +74,7 @@ export function useLocalState<T>(key: string, fallback: T) {
 
   return [val, setVal] as const;
 }
+export const LOCAL_WRITE_EVENT = "meezan:refresh";
+export const mergeState = (state: any) => {};
+export const restoreAll = (data: any) => {};
+export const snapshotAll = () => ({});
