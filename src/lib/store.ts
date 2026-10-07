@@ -7,18 +7,21 @@ export interface DayLog {
   points: number;
 }
 
-// تخزين محلي بسيط وبدون أخطاء خارجية
 export function useStore() {
   const [totalPoints, setTotalPoints] = useState<number>(() => {
     if (typeof window === 'undefined') return 0;
     const saved = localStorage.getItem('meezan_total_points');
-    return saved ? Number(saved) : 0;
+    return saved && !isNaN(Number(saved)) ? Number(saved) : 0;
   });
 
   const [logs, setLogs] = useState<DayLog[]>(() => {
     if (typeof window === 'undefined') return [];
-    const saved = localStorage.getItem('meezan_logs');
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem('meezan_logs');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
   });
 
   useEffect(() => {
@@ -27,18 +30,20 @@ export function useStore() {
   }, [totalPoints, logs]);
 
   const addPoint = (points: number, deedId = 'default') => {
+    const pts = isNaN(Number(points)) ? 1 : Number(points);
     const newLog: DayLog = {
       id: Date.now().toString(),
       date: new Date().toISOString().split('T')[0],
       deedId,
-      points,
+      points: pts,
     };
-    setTotalPoints((prev) => prev + points);
+    setTotalPoints((prev) => (isNaN(prev) ? 0 : prev) + pts);
     setLogs((prev) => [...prev, newLog]);
   };
 
   const removePoint = (points: number, deedId = 'default') => {
-    setTotalPoints((prev) => Math.max(0, prev - points));
+    const pts = isNaN(Number(points)) ? 1 : Number(points);
+    setTotalPoints((prev) => Math.max(0, (isNaN(prev) ? 0 : prev) - pts));
     setLogs((prev) => prev.filter((l) => l.deedId !== deedId));
   };
 
@@ -47,13 +52,16 @@ export function useStore() {
     const today = logs.filter((l) => l.date === todayStr);
     const lifetimeById: Record<string, number> = {};
     logs.forEach((l) => {
-      lifetimeById[l.deedId] = (lifetimeById[l.deedId] || 0) + l.points;
+      const p = isNaN(Number(l.points)) ? 0 : Number(l.points);
+      lifetimeById[l.deedId] = (lifetimeById[l.deedId] || 0) + p;
     });
+
+    const safeTotal = isNaN(Number(totalPoints)) ? 0 : Number(totalPoints);
 
     return {
       log: logs,
       today,
-      lifetimeTotal: totalPoints,
+      lifetimeTotal: safeTotal,
       lifetimeById,
       add: (deedId: string, points: number) => addPoint(points, deedId),
       remove: (deedId: string, points: number) => removePoint(points, deedId),
