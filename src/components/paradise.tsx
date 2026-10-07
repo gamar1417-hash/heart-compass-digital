@@ -187,3 +187,4 @@ export function Paradise({ points = 350 }: ParadiseProps) {
 }
 
 export const ParadiseScene = Paradise;
+export default Paradise;
