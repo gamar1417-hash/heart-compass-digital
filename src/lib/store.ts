@@ -1,5 +1,4 @@
- import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+ import { useState, useEffect } from 'react';
 
 export interface DayLog {
   id: string;
@@ -8,65 +7,73 @@ export interface DayLog {
   points: number;
 }
 
-interface StoreState {
-  totalPoints: number;
-  logs: DayLog[];
-  addPoint: (points: number, deedId?: string) => void;
-  removePoint: (points: number, deedId?: string) => void;
-  useDayLog: () => any;
-}
+export function useStore() {
+  const [totalPoints, setTotalPoints] = useState<number>(() => {
+    if (typeof window === 'undefined') return 150;
+    const saved = localStorage.getItem('meezan_total_points');
+    return saved ? Number(saved) : 150;
+  });
 
-export const useStore = create<StoreState>()(
-  persist(
-    (set, get) => ({
-      totalPoints: 0,
-      logs: [],
-      addPoint: (points: number, deedId = 'default') => {
-        const newLog = { 
-          id: Date.now().toString(), 
-          date: new Date().toISOString().split('T')[0], 
-          deedId, 
-          points: Number(points) || 1 
-        };
-        set((state) => ({ 
-          totalPoints: (state.totalPoints || 0) + (Number(points) || 1), 
-          logs: [...state.logs, newLog] 
-        }));
-      },
-      removePoint: (points: number, deedId = 'default') => {
-        set((state) => ({ 
-          totalPoints: Math.max(0, (state.totalPoints || 0) - (Number(points) || 1)), 
-          logs: state.logs.filter(l => l.deedId !== deedId) 
-        }));
-      },
-      useDayLog: () => {
-        const state = get();
-        const todayStr = new Date().toISOString().split('T')[0];
-        const today = state.logs.filter(l => l.date === todayStr);
-        const lifetimeById: Record<string, number> = {};
-        state.logs.forEach(l => { 
-          lifetimeById[l.deedId] = (lifetimeById[l.deedId] || 0) + (Number(l.points) || 0); 
-        });
-        return {
-          log: state.logs,
-          today,
-          lifetimeTotal: Number(state.totalPoints) || 0,
-          lifetimeById,
-          add: (deedId: string, points: number) => get().addPoint(points, deedId),
-          remove: (deedId: string, points: number) => get().removePoint(points, deedId),
-          refresh: () => {},
-        };
-      }
-    }),
-    { name: 'meezan-storage' }
-  )
-);
+  const [logs, setLogs] = useState<DayLog[]>(() => {
+    if (typeof window === 'undefined') return [];
+    const saved = localStorage.getItem('meezan_logs');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('meezan_total_points', totalPoints.toString());
+    localStorage.setItem('meezan_logs', JSON.stringify(logs));
+  }, [totalPoints, logs]);
+
+  const addPoint = (points: number = 1, deedId = 'default') => {
+    const pts = Number(points) || 1;
+    const newTotal = totalPoints + pts;
+    setTotalPoints(newTotal);
+    const newLog: DayLog = {
+      id: Date.now().toString(),
+      date: new Date().toISOString().split('T')[0],
+      deedId,
+      points: pts
+    };
+    setLogs(prev => [...prev, newLog]);
+  };
+
+  const removePoint = (points: number = 1, deedId = 'default') => {
+    const pts = Number(points) || 1;
+    setTotalPoints(prev => Math.max(0, prev - pts));
+    setLogs(prev => prev.filter(l => l.deedId !== deedId));
+  };
+
+  return {
+    totalPoints,
+    logs,
+    addPoint,
+    removePoint
+  };
+}
 
 export function useDayLog() {
-  return useStore((state) => state.useDayLog());
+  const store = useStore();
+  const todayStr = new Date().toISOString().split('T')[0];
+  const today = store.logs.filter(l => l.date === todayStr);
+  
+  const lifetimeById: Record<string, number> = {};
+  store.logs.forEach(l => {
+    lifetimeById[l.deedId] = (lifetimeById[l.deedId] || 0) + (Number(l.points) || 0);
+  });
+
+  return {
+    log: store.logs,
+    today,
+    lifetimeTotal: store.totalPoints,
+    lifetimeById,
+    add: (deedId: string, points: number) => store.addPoint(points, deedId),
+    remove: (deedId: string, points: number) => store.removePoint(points, deedId),
+    refresh: () => {},
+  };
 }
 
-export function useLocalState<T>(key: string, fallback: T) {
+export function useLocalState<T>(_key: string, _fallback: T) {
   const store = useStore();
   return [store.totalPoints, store.addPoint] as const;
 }
