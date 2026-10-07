@@ -1,3 +1,4 @@
+ 
 import { useCallback, useEffect, useState } from "react";
 
 const PREFIX = "hasibu:";
@@ -14,150 +15,76 @@ function read<T>(key: string, fallback: T): T {
   }
 }
 
-/** كل بيانات المستخدم المحفوظة محلياً (للمزامنة السحابية). */
-export function snapshotAll(): Record<string, unknown> {
-  const out: Record<string, unknown> = {};
-  if (typeof window === "undefined") return out;
-  try {
-    for (let i = 0; i < window.localStorage.length; i++) {
-      const k = window.localStorage.key(i);
-      if (!k || !k.startsWith(PREFIX)) continue;
-      const raw = window.localStorage.getItem(k);
-      if (raw == null) continue;
-      try {
-        out[k.slice(PREFIX.length)] = JSON.parse(raw);
-      } catch {
-        /* ignore */
-      }
-    }
-  } catch {
-    /* ignore */
-  }
-  return out;
-}
-
-/** كتابة البيانات القادمة من السحابة ثم تنبيه الواجهة لإعادة القراءة. */
-export function restoreAll(data: Record<string, unknown>) {
+function write<T>(key: string, val: T) {
   if (typeof window === "undefined") return;
-  for (const [k, v] of Object.entries(data)) {
-    try {
-      window.localStorage.setItem(PREFIX + k, JSON.stringify(v));
-    } catch {
-      /* ignore */
-    }
-  }
-  window.dispatchEvent(new Event(REFRESH_EVENT));
-}
-
-/** دمج سجلات الأيام: نأخذ الأكبر لكل عمل في كل يوم حتى لا يضيع شيء. */
-export function mergeState(
-  local: Record<string, unknown>,
-  remote: Record<string, unknown>,
-): Record<string, unknown> {
-  const merged: Record<string, unknown> = { ...remote, ...local };
-
-  const lLogs = (local["daylogs"] ?? {}) as Record<string, Record<string, number>>;
-  const rLogs = (remote["daylogs"] ?? {}) as Record<string, Record<string, number>>;
-  const days = new Set([...Object.keys(lLogs), ...Object.keys(rLogs)]);
-  const logs: Record<string, Record<string, number>> = {};
-  for (const d of days) {
-    const a = lLogs[d] ?? {};
-    const b = rLogs[d] ?? {};
-    const ids = new Set([...Object.keys(a), ...Object.keys(b)]);
-    const day: Record<string, number> = {};
-    for (const id of ids) day[id] = Math.max(a[id] ?? 0, b[id] ?? 0);
-    logs[d] = day;
-  }
-  if (days.size) merged["daylogs"] = logs;
-
-  for (const key of Object.keys(merged)) {
-    const l = local[key];
-    const r = remote[key];
-    if (key === "daylogs") continue;
-    if (Array.isArray(l) && Array.isArray(r)) {
-      const seen = new Set<string>();
-      const out: unknown[] = [];
-      for (const item of [...r, ...l]) {
-        const sig = JSON.stringify(item);
-        if (seen.has(sig)) continue;
-        seen.add(sig);
-        out.push(item);
-      }
-      merged[key] = out;
-    }
-  }
-  return merged;
-}
-
-/** Hydration-safe persisted state (localStorage + مزامنة سحابية عند تسجيل الدخول). */
-export function useLocalState<T>(key: string, initial: T) {
-  const [value, setValue] = useState<T>(initial);
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    setValue(read<T>(key, initial));
-    setReady(true);
-    const onRefresh = () => setValue(read<T>(key, initial));
-    window.addEventListener(REFRESH_EVENT, onRefresh);
-    return () => window.removeEventListener(REFRESH_EVENT, onRefresh);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key]);
-
-  useEffect(() => {
-    if (!ready) return;
-    try {
-      window.localStorage.setItem(PREFIX + key, JSON.stringify(value));
-      window.dispatchEvent(new Event(LOCAL_WRITE_EVENT));
-    } catch {
-      /* storage may be unavailable */
-    }
-  }, [key, value, ready]);
-
-  return [value, setValue, ready] as const;
+  try {
+    window.localStorage.setItem(PREFIX + key, JSON.stringify(val));
+    window.dispatchEvent(new Event(LOCAL_WRITE_EVENT));
+  } catch {}
 }
 
 export function todayKey() {
-  return new Date().toISOString().slice(0, 10);
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
 }
 
 export type DayLog = Record<string, number>;
 
-export function useDayLog() {
-  const [logs, setLogs] = useLocalState<Record<string, DayLog>>("daylogs", {});
-  const day = todayKey();
-  const today = logs[day] ?? {};
+export function useDayLog(dateKey?: string) {
+  const key = dateKey ?? todayKey();
+  const [log, setLog] = useState<DayLog>(() => read<DayLog>(key, {}));
+  const [lifetimeTotal, setLifetimeTotal] = useState<number>(() => read<number>("lifetime_total", 0));
 
-  const add = useCallback(
-    (id: string, delta = 1) => {
-      setLogs((prev) => {
-        const d = { ...(prev[day] ?? {}) };
-        d[id] = Math.max(0, (d[id] ?? 0) + delta);
-        return { ...prev, [day]: d };
-      });
-    },
-    [day, setLogs],
-  );
+  const refresh = useCallback(() => {
+    setLog(read<DayLog>(key, {}));
+    setLifetimeTotal(read<number>("lifetime_total", 0));
+  }, [key]);
 
-  const total = Object.values(today).reduce((a, b) => a + b, 0);
-  const streak = (() => {
-    let n = 0;
-    for (let i = 0; i < 400; i++) {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      const k = d.toISOString().slice(0, 10);
-      const sum = Object.values(logs[k] ?? {}).reduce((a, b) => a + b, 0);
-      if (sum > 0) n++;
-      else if (i > 0) break;
+  useEffect(() => {
+    refresh();
+    const handleLocal = () => refresh();
+    window.addEventListener(LOCAL_WRITE_EVENT, handleLocal);
+    window.addEventListener(REFRESH_EVENT, handleLocal);
+    return () => {
+      window.removeEventListener(LOCAL_WRITE_EVENT, handleLocal);
+      window.removeEventListener(REFRESH_EVENT, handleLocal);
+    };
+  }, [refresh]);
+
+  const add = (itemId: string, delta = 1) => {
+    const currentLog = read<DayLog>(key, {});
+    const currentCount = currentLog[itemId] ?? 0;
+    const nextCount = Math.max(0, currentCount + delta);
+    const updatedLog = { ...currentLog, [itemId]: nextCount };
+    
+    write(key, updatedLog);
+
+    if (delta > 0) {
+      const currentLifetime = read<number>("lifetime_total", 0);
+      write("lifetime_total", currentLifetime + delta);
     }
-    return n;
-  })();
+    
+    refresh();
+  };
 
-  // مجاميع تراكمية لا تنتهي بنهاية اليوم
-  const lifetimeById: Record<string, number> = {};
-  for (const d of Object.values(logs)) {
-    for (const [k, v] of Object.entries(d)) lifetimeById[k] = (lifetimeById[k] ?? 0) + v;
-  }
-  const lifetimeTotal = Object.values(lifetimeById).reduce((a, b) => a + b, 0);
+  const remove = (itemId: string, delta = 1) => {
+    const currentLog = read<DayLog>(key, {});
+    const currentCount = currentLog[itemId] ?? 0;
+    if (currentCount <= 0) return;
 
-  return { today, add, total, streak, logs, lifetimeById, lifetimeTotal };
+    const actualDelta = Math.min(currentCount, delta);
+    const updatedLog = { ...currentLog, [itemId]: currentCount - actualDelta };
+    
+    write(key, updatedLog);
+    
+    const currentLifetime = read<number>("lifetime_total", 0);
+    write("lifetime_total", Math.max(0, currentLifetime - actualDelta));
+    
+    refresh();
+  };
+
+  return { log, lifetimeTotal, add, remove, refresh };
 }
