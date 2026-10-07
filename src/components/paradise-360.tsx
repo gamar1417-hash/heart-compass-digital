@@ -85,7 +85,7 @@ export default function Paradise360({ lifetime }: { lifetime: number }) {
       if (!pts.has(e.pointerId)) return;
       pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
       if (pts.size === 2) {
-        const [a, b] = [...pts.values()];
+        const [a, b] = [...pts.values()] as [{ x: number; y: number }, { x: number; y: number }];
         const dist = Math.hypot(a.x - b.x, a.y - b.y);
         if (pinch) targetFov = THREE.MathUtils.clamp(targetFov - (dist - pinch) * 0.1, 30, 90);
         pinch = dist;
