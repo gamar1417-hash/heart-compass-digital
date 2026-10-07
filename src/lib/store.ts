@@ -1,90 +1,58 @@
- 
-import { useCallback, useEffect, useState } from "react";
+ import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-const PREFIX = "hasibu:";
-export const REFRESH_EVENT = "hasibu:refresh";
-export const LOCAL_WRITE_EVENT = "hasibu:localwrite";
-
-function read<T>(key: string, fallback: T): T {
-  if (typeof window === "undefined") return fallback;
-  try {
-    const raw = window.localStorage.getItem(PREFIX + key);
-    return raw ? (JSON.parse(raw) as T) : fallback;
-  } catch {
-    return fallback;
-  }
+export interface DayLog {
+  id: string;
+  date: string;
+  deedId: string;
+  points: number;
 }
 
-function write<T>(key: string, val: T) {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(PREFIX + key, JSON.stringify(val));
-    window.dispatchEvent(new Event(LOCAL_WRITE_EVENT));
-  } catch {}
-}
-
-export function todayKey() {
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${y}-${m}-${day}`;
-}
-
-export type DayLog = Record<string, number>;
-
-export function useDayLog(dateKey?: string) {
-  const key = dateKey ?? todayKey();
-  const [log, setLog] = useState<DayLog>(() => read<DayLog>(key, {}));
-  const [lifetimeTotal, setLifetimeTotal] = useState<number>(() => read<number>("lifetime_total", 0));
-
-  const refresh = useCallback(() => {
-    setLog(read<DayLog>(key, {}));
-    setLifetimeTotal(read<number>("lifetime_total", 0));
-  }, [key]);
-
-  useEffect(() => {
-    refresh();
-    const handleLocal = () => refresh();
-    window.addEventListener(LOCAL_WRITE_EVENT, handleLocal);
-    window.addEventListener(REFRESH_EVENT, handleLocal);
-    return () => {
-      window.removeEventListener(LOCAL_WRITE_EVENT, handleLocal);
-      window.removeEventListener(REFRESH_EVENT, handleLocal);
-    };
-  }, [refresh]);
-
-  const add = (itemId: string, delta = 1) => {
-    const currentLog = read<DayLog>(key, {});
-    const currentCount = currentLog[itemId] ?? 0;
-    const nextCount = Math.max(0, currentCount + delta);
-    const updatedLog = { ...currentLog, [itemId]: nextCount };
-    
-    write(key, updatedLog);
-
-    if (delta > 0) {
-      const currentLifetime = read<number>("lifetime_total", 0);
-      write("lifetime_total", currentLifetime + delta);
-    }
-    
-    refresh();
+interface StoreState {
+  totalPoints: number;
+  logs: DayLog[];
+  addPoint: (points: number, deedId?: string) => void;
+  removePoint: (points: number, deedId?: string) => void;
+  useDayLog: () => {
+    log: DayLog[];
+    today: DayLog[];
+    lifetimeTotal: number;
+    lifetimeById: Record<string, number>;
+    add: (deedId: string, points: number) => void;
+    remove: (deedId: string, points: number) => void;
+    refresh: () => void;
   };
-
-  const remove = (itemId: string, delta = 1) => {
-    const currentLog = read<DayLog>(key, {});
-    const currentCount = currentLog[itemId] ?? 0;
-    if (currentCount <= 0) return;
-
-    const actualDelta = Math.min(currentCount, delta);
-    const updatedLog = { ...currentLog, [itemId]: currentCount - actualDelta };
-    
-    write(key, updatedLog);
-    
-    const currentLifetime = read<number>("lifetime_total", 0);
-    write("lifetime_total", Math.max(0, currentLifetime - actualDelta));
-    
-    refresh();
-  };
-
-  return { log, lifetimeTotal, add, remove, refresh };
 }
+
+export const useStore = create<StoreState>()(
+  persist(
+    (set, get) => ({
+      totalPoints: 0,
+      logs: [],
+      addPoint: (points: number, deedId = 'default') => {
+        const newLog = { id: Date.now().toString(), date: new Date().toISOString().split('T')[0], deedId, points };
+        set((state) => ({ totalPoints: state.totalPoints + points, logs: [...state.logs, newLog] }));
+      },
+      removePoint: (points: number, deedId = 'default') => {
+        set((state) => ({ totalPoints: Math.max(0, state.totalPoints - points), logs: state.logs.filter(l => l.deedId !== deedId) }));
+      },
+      useDayLog: () => {
+        const state = get();
+        const todayStr = new Date().toISOString().split('T')[0];
+        const today = state.logs.filter(l => l.date === todayStr);
+        const lifetimeById: Record<string, number> = {};
+        state.logs.forEach(l => { lifetimeById[l.deedId] = (lifetimeById[l.deedId] || 0) + l.points; });
+        return {
+          log: state.logs,
+          today,
+          lifetimeTotal: state.totalPoints,
+          lifetimeById,
+          add: (deedId, points) => get().addPoint(points, deedId),
+          remove: (deedId, points) => get().removePoint(points, deedId),
+          refresh: () => {},
+        };
+      }
+    }),
+    { name: 'meezan-storage' }
+  )
+);
