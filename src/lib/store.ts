@@ -1,5 +1,6 @@
  import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { useState, useEffect } from 'react';
 
 export interface DayLog {
   id: string;
@@ -13,15 +14,7 @@ interface StoreState {
   logs: DayLog[];
   addPoint: (points: number, deedId?: string) => void;
   removePoint: (points: number, deedId?: string) => void;
-  useDayLog: () => {
-    log: DayLog[];
-    today: DayLog[];
-    lifetimeTotal: number;
-    lifetimeById: Record<string, number>;
-    add: (deedId: string, points: number) => void;
-    remove: (deedId: string, points: number) => void;
-    refresh: () => void;
-  };
+  useDayLog: () => any;
 }
 
 export const useStore = create<StoreState>()(
@@ -47,8 +40,8 @@ export const useStore = create<StoreState>()(
           today,
           lifetimeTotal: state.totalPoints,
           lifetimeById,
-          add: (deedId, points) => get().addPoint(points, deedId),
-          remove: (deedId, points) => get().removePoint(points, deedId),
+          add: (deedId: string, points: number) => get().addPoint(points, deedId),
+          remove: (deedId: string, points: number) => get().removePoint(points, deedId),
           refresh: () => {},
         };
       }
@@ -56,3 +49,28 @@ export const useStore = create<StoreState>()(
     { name: 'meezan-storage' }
   )
 );
+
+// إرجاع الدوال الناقصة لتشغيل باقي صفحات التطبيق بنجاح
+export function useDayLog() {
+  return useStore((state) => state.useDayLog());
+}
+
+export function useLocalState<T>(key: string, fallback: T) {
+  const [val, setVal] = useState<T>(() => {
+    if (typeof window === 'undefined') return fallback;
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : fallback;
+    } catch {
+      return fallback;
+    }
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(key, JSON.stringify(val));
+    }
+  }, [key, val]);
+
+  return [val, setVal] as const;
+}
