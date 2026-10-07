@@ -1,4 +1,5 @@
- import { useState, useEffect } from 'react';
+ import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export interface DayLog {
   id: string;
@@ -7,94 +8,67 @@ export interface DayLog {
   points: number;
 }
 
-export function useStore() {
-  const [totalPoints, setTotalPoints] = useState<number>(() => {
-    if (typeof window === 'undefined') return 0;
-    const saved = localStorage.getItem('meezan_total_points');
-    return saved && !isNaN(Number(saved)) ? Number(saved) : 0;
-  });
-
-  const [logs, setLogs] = useState<DayLog[]>(() => {
-    if (typeof window === 'undefined') return [];
-    try {
-      const saved = localStorage.getItem('meezan_logs');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
-
-  useEffect(() => {
-    localStorage.setItem('meezan_total_points', totalPoints.toString());
-    localStorage.setItem('meezan_logs', JSON.stringify(logs));
-  }, [totalPoints, logs]);
-
-  const addPoint = (points: number, deedId = 'default') => {
-    const pts = isNaN(Number(points)) ? 1 : Number(points);
-    const newLog: DayLog = {
-      id: Date.now().toString(),
-      date: new Date().toISOString().split('T')[0],
-      deedId,
-      points: pts,
-    };
-    setTotalPoints((prev) => (isNaN(prev) ? 0 : prev) + pts);
-    setLogs((prev) => [...prev, newLog]);
-  };
-
-  const removePoint = (points: number, deedId = 'default') => {
-    const pts = isNaN(Number(points)) ? 1 : Number(points);
-    setTotalPoints((prev) => Math.max(0, (isNaN(prev) ? 0 : prev) - pts));
-    setLogs((prev) => prev.filter((l) => l.deedId !== deedId));
-  };
-
-  const useDayLog = () => {
-    const todayStr = new Date().toISOString().split('T')[0];
-    const today = logs.filter((l) => l.date === todayStr);
-    const lifetimeById: Record<string, number> = {};
-    logs.forEach((l) => {
-      const p = isNaN(Number(l.points)) ? 0 : Number(l.points);
-      lifetimeById[l.deedId] = (lifetimeById[l.deedId] || 0) + p;
-    });
-
-    const safeTotal = isNaN(Number(totalPoints)) ? 0 : Number(totalPoints);
-
-    return {
-      log: logs,
-      today,
-      lifetimeTotal: safeTotal,
-      lifetimeById,
-      add: (deedId: string, points: number) => addPoint(points, deedId),
-      remove: (deedId: string, points: number) => removePoint(points, deedId),
-      refresh: () => {},
-    };
-  };
-
-  return { totalPoints, logs, addPoint, removePoint, useDayLog };
+interface StoreState {
+  totalPoints: number;
+  logs: DayLog[];
+  addPoint: (points: number, deedId?: string) => void;
+  removePoint: (points: number, deedId?: string) => void;
+  useDayLog: () => any;
 }
 
+export const useStore = create<StoreState>()(
+  persist(
+    (set, get) => ({
+      totalPoints: 0,
+      logs: [],
+      addPoint: (points: number, deedId = 'default') => {
+        const newLog = { 
+          id: Date.now().toString(), 
+          date: new Date().toISOString().split('T')[0], 
+          deedId, 
+          points: Number(points) || 1 
+        };
+        set((state) => ({ 
+          totalPoints: (state.totalPoints || 0) + (Number(points) || 1), 
+          logs: [...state.logs, newLog] 
+        }));
+      },
+      removePoint: (points: number, deedId = 'default') => {
+        set((state) => ({ 
+          totalPoints: Math.max(0, (state.totalPoints || 0) - (Number(points) || 1)), 
+          logs: state.logs.filter(l => l.deedId !== deedId) 
+        }));
+      },
+      useDayLog: () => {
+        const state = get();
+        const todayStr = new Date().toISOString().split('T')[0];
+        const today = state.logs.filter(l => l.date === todayStr);
+        const lifetimeById: Record<string, number> = {};
+        state.logs.forEach(l => { 
+          lifetimeById[l.deedId] = (lifetimeById[l.deedId] || 0) + (Number(l.points) || 0); 
+        });
+        return {
+          log: state.logs,
+          today,
+          lifetimeTotal: Number(state.totalPoints) || 0,
+          lifetimeById,
+          add: (deedId: string, points: number) => get().addPoint(points, deedId),
+          remove: (deedId: string, points: number) => get().removePoint(points, deedId),
+          refresh: () => {},
+        };
+      }
+    }),
+    { name: 'meezan-storage' }
+  )
+);
+
 export function useDayLog() {
-  const store = useStore();
-  return store.useDayLog();
+  return useStore((state) => state.useDayLog());
 }
 
 export function useLocalState<T>(key: string, fallback: T) {
-  const [val, setVal] = useState<T>(() => {
-    if (typeof window === 'undefined') return fallback;
-    try {
-      const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : fallback;
-    } catch {
-      return fallback;
-    }
-  });
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem(key, JSON.stringify(val));
-    }
-  }, [key, val]);
-
-  return [val, setVal] as const;
+  const store = useStore();
+  return [store.totalPoints, store.addPoint] as const;
 }
 
 export const LOCAL_WRITE_EVENT = "meezan:refresh";
