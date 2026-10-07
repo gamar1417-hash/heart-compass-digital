@@ -1,6 +1,4 @@
- import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { useState, useEffect } from 'react';
+ import { useState, useEffect } from 'react';
 
 export interface DayLog {
   id: string;
@@ -9,50 +7,66 @@ export interface DayLog {
   points: number;
 }
 
-interface StoreState {
-  totalPoints: number;
-  logs: DayLog[];
-  addPoint: (points: number, deedId?: string) => void;
-  removePoint: (points: number, deedId?: string) => void;
-  useDayLog: () => any;
+// تخزين محلي بسيط وبدون أخطاء خارجية
+export function useStore() {
+  const [totalPoints, setTotalPoints] = useState<number>(() => {
+    if (typeof window === 'undefined') return 0;
+    const saved = localStorage.getItem('meezan_total_points');
+    return saved ? Number(saved) : 0;
+  });
+
+  const [logs, setLogs] = useState<DayLog[]>(() => {
+    if (typeof window === 'undefined') return [];
+    const saved = localStorage.getItem('meezan_logs');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('meezan_total_points', totalPoints.toString());
+    localStorage.setItem('meezan_logs', JSON.stringify(logs));
+  }, [totalPoints, logs]);
+
+  const addPoint = (points: number, deedId = 'default') => {
+    const newLog: DayLog = {
+      id: Date.now().toString(),
+      date: new Date().toISOString().split('T')[0],
+      deedId,
+      points,
+    };
+    setTotalPoints((prev) => prev + points);
+    setLogs((prev) => [...prev, newLog]);
+  };
+
+  const removePoint = (points: number, deedId = 'default') => {
+    setTotalPoints((prev) => Math.max(0, prev - points));
+    setLogs((prev) => prev.filter((l) => l.deedId !== deedId));
+  };
+
+  const useDayLog = () => {
+    const todayStr = new Date().toISOString().split('T')[0];
+    const today = logs.filter((l) => l.date === todayStr);
+    const lifetimeById: Record<string, number> = {};
+    logs.forEach((l) => {
+      lifetimeById[l.deedId] = (lifetimeById[l.deedId] || 0) + l.points;
+    });
+
+    return {
+      log: logs,
+      today,
+      lifetimeTotal: totalPoints,
+      lifetimeById,
+      add: (deedId: string, points: number) => addPoint(points, deedId),
+      remove: (deedId: string, points: number) => removePoint(points, deedId),
+      refresh: () => {},
+    };
+  };
+
+  return { totalPoints, logs, addPoint, removePoint, useDayLog };
 }
 
-export const useStore = create<StoreState>()(
-  persist(
-    (set, get) => ({
-      totalPoints: 0,
-      logs: [],
-      addPoint: (points: number, deedId = 'default') => {
-        const newLog = { id: Date.now().toString(), date: new Date().toISOString().split('T')[0], deedId, points };
-        set((state) => ({ totalPoints: state.totalPoints + points, logs: [...state.logs, newLog] }));
-      },
-      removePoint: (points: number, deedId = 'default') => {
-        set((state) => ({ totalPoints: Math.max(0, state.totalPoints - points), logs: state.logs.filter(l => l.deedId !== deedId) }));
-      },
-      useDayLog: () => {
-        const state = get();
-        const todayStr = new Date().toISOString().split('T')[0];
-        const today = state.logs.filter(l => l.date === todayStr);
-        const lifetimeById: Record<string, number> = {};
-        state.logs.forEach(l => { lifetimeById[l.deedId] = (lifetimeById[l.deedId] || 0) + l.points; });
-        return {
-          log: state.logs,
-          today,
-          lifetimeTotal: state.totalPoints,
-          lifetimeById,
-          add: (deedId: string, points: number) => get().addPoint(points, deedId),
-          remove: (deedId: string, points: number) => get().removePoint(points, deedId),
-          refresh: () => {},
-        };
-      }
-    }),
-    { name: 'meezan-storage' }
-  )
-);
-
-// إرجاع الدوال الناقصة لتشغيل باقي صفحات التطبيق بنجاح
 export function useDayLog() {
-  return useStore((state) => state.useDayLog());
+  const store = useStore();
+  return store.useDayLog();
 }
 
 export function useLocalState<T>(key: string, fallback: T) {
@@ -74,7 +88,8 @@ export function useLocalState<T>(key: string, fallback: T) {
 
   return [val, setVal] as const;
 }
+
 export const LOCAL_WRITE_EVENT = "meezan:refresh";
-export const mergeState = (state: any) => {};
-export const restoreAll = (data: any) => {};
+export const mergeState = (_state: any) => {};
+export const restoreAll = (_data: any) => {};
 export const snapshotAll = () => ({});
