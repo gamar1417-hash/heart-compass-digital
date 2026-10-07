@@ -1,5 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { ClientOnly, createFileRoute, Link } from "@tanstack/react-router";
+import { lazy, Suspense, useState } from "react";
+
+const Paradise360 = lazy(() => import("@/components/paradise-360"));
 import { Btn, Card, Note, PageTitle } from "@/components/bits";
 import { ParadiseScene, paradiseCounts, paradiseStage } from "@/components/paradise";
 import { groups } from "@/data/content";
@@ -38,6 +40,12 @@ function Jannah() {
   return (
     <div className="space-y-4">
       <PageTitle emoji="🌿" title="جنتي" sub="مشهد واحد بسيط يتّسع مع كل عمل تسجّله — تمثيل تحفيزي رمزي لا حساب للأجر." />
+
+      <ClientOnly fallback={<div className="h-[75svh] min-h-[26rem] rounded-3xl bg-muted" />}>
+        <Suspense fallback={<div className="h-[75svh] min-h-[26rem] rounded-3xl bg-muted" />}>
+          <Paradise360 lifetime={lifetimeTotal} />
+        </Suspense>
+      </ClientOnly>
 
       <div className="overflow-hidden rounded-3xl border border-border shadow-[var(--shadow-soft)]">
         <ParadiseScene lifetime={lifetimeTotal} />
