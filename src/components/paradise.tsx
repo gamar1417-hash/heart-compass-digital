@@ -97,3 +97,4 @@ export default function Paradise({ totalPoints }: { totalPoints: number }) {
 }
 export const paradiseCounts = (points: number) => ({ trees: Math.floor(points / 10), rivers: points >= 50 ? 1 : 0, palaces: points >= 200 ? 1 : 0 });
 export const paradiseStage = (points: number) => points >= 200 ? 3 : points >= 50 ? 2 : 1;
+export const ParadiseScene = Paradise;
