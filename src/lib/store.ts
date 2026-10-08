@@ -25,27 +25,31 @@ export function useDayLog(dateKey?: string) {
 
   let lifetimeTotal = 0;
   const lifetimeById: Record<string, number> = {};
-  Object.values(logsState).forEach((day: any) => {
-    if (day && typeof day.points === 'number') {
-      lifetimeTotal += day.points;
-    }
-    if (day && day.items && Array.isArray(day.items)) {
-      day.items.forEach((item: any) => {
-        const id = item.id || item.name;
-        if (id) {
-          lifetimeById[id] = (lifetimeById[id] || 0) + (item.count || item.points || 1);
-        }
-      });
-    }
-  });
+  
+  if (logsState && typeof logsState === 'object') {
+    Object.values(logsState).forEach((day: any) => {
+      if (day && typeof day.points === 'number') {
+        lifetimeTotal += day.points;
+      }
+      if (day && day.items && Array.isArray(day.items)) {
+        day.items.forEach((item: any) => {
+          const id = item.id || item.name;
+          if (id) {
+            lifetimeById[id] = (lifetimeById[id] || 0) + (item.count || item.points || 1);
+          }
+        });
+      }
+    });
+  }
 
   const add = (itemOrPoints: any) => {
     setLogsState((prev) => {
-      const dayData = prev[activeKey] || { points: 0, items: [] };
+      const safePrev = prev || {};
+      const dayData = safePrev[activeKey] || { points: 0, items: [] };
       const newPoints = (dayData.points || 0) + (typeof itemOrPoints === 'number' ? itemOrPoints : (itemOrPoints?.points || 1));
       const newItems = [...(dayData.items || []), itemOrPoints];
       return {
-        ...prev,
+        ...safePrev,
         [activeKey]: { ...dayData, points: newPoints, items: newItems }
       };
     });
@@ -53,27 +57,28 @@ export function useDayLog(dateKey?: string) {
 
   const remove = (itemId: string) => {
     setLogsState((prev) => {
-      const dayData = prev[activeKey];
-      if (!dayData || !dayData.items) return prev;
+      const safePrev = prev || {};
+      const dayData = safePrev[activeKey];
+      if (!dayData || !dayData.items) return safePrev;
       const newItems = dayData.items.filter((i: any) => i.id !== itemId && i.name !== itemId);
       return {
-        ...prev,
+        ...safePrev,
         [activeKey]: { ...dayData, items: newItems }
       };
     });
   };
 
   const refresh = () => {
-    setLogsState({ ...logsState });
+    setLogsState({ ...(logsState || {}) });
   };
 
   return {
     today: currentLog,
     log: currentLog,
-    logs: logsState,
+    logs: logsState || {},
     total: currentLog.points || 0,
     lifetimeTotal,
-    lifetimeById,
+    lifetimeById: lifetimeById || {},
     add,
     remove,
     refresh
