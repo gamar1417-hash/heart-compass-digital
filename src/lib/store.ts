@@ -1,84 +1,106 @@
  import { useState, useEffect } from 'react';
 
-export interface DayLog {
-  id: string;
-  date: string;
-  deedId: string;
-  points: number;
-}
+// 1. إصلاح وتوسيع useDayLog ليعيد كافة الخصائص المتوافقة مع جميع الصفحات (deeds, quran, calendar, etc.)
+export function useDayLog(dateKey?: string) {
+  // استخدام تاريخ اليوم كافتراقي إذا لم يُحدد
+  const todayKey = new Date().toISOString().split('T')[0];
+  const activeKey = dateKey || todayKey;
 
-export function useStore() {
-  const [totalPoints, setTotalPoints] = useState<number>(() => {
-    if (typeof window === 'undefined') return 150;
-    const saved = localStorage.getItem('meezan_total_points');
-    return saved ? Number(saved) : 150;
-  });
-
-  const [logs, setLogs] = useState<DayLog[]>(() => {
-    if (typeof window === 'undefined') return [];
-    const saved = localStorage.getItem('meezan_logs');
-    return saved ? JSON.parse(saved) : [];
+  const [logsState, setLogsState] = useState<Record<string, any>>(() => {
+    try {
+      const saved = localStorage.getItem('heart_compass_logs');
+      return saved ? JSON.parse.parse(saved) : {}; // أو JSON.parse(saved)
+    } catch {
+      return {};
+    }
   });
 
   useEffect(() => {
-    localStorage.setItem('meezan_total_points', totalPoints.toString());
-    localStorage.setItem('meezan_logs', JSON.stringify(logs));
-  }, [totalPoints, logs]);
+    try {
+      localStorage.setItem('heart_compass_logs', JSON.stringify(logsState));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [logsState]);
 
-  const addPoint = (points: number = 1, deedId = 'default') => {
-    const pts = Number(points) || 1;
-    const newTotal = totalPoints + pts;
-    setTotalPoints(newTotal);
-    const newLog: DayLog = {
-      id: Date.now().toString(),
-      date: new Date().toISOString().split('T')[0],
-      deedId,
-      points: pts
-    };
-    setLogs(prev => [...prev, newLog]);
-  };
+  const currentLog = logsState[activeKey] || { points: 0, items: [] };
 
-  const removePoint = (points: number = 1, deedId = 'default') => {
-    const pts = Number(points) || 1;
-    setTotalPoints(prev => Math.max(0, prev - pts));
-    setLogs(prev => prev.filter(l => l.deedId !== deedId));
-  };
-
-  return {
-    totalPoints,
-    logs,
-    addPoint,
-    removePoint
-  };
-}
-
-export function useDayLog() {
-  const store = useStore();
-  const todayStr = new Date().toISOString().split('T')[0];
-  const today = store.logs.filter(l => l.date === todayStr);
-  
+  // حساب المجموع الكلي والتاريخي
+  let lifetimeTotal = 0;
   const lifetimeById: Record<string, number> = {};
-  store.logs.forEach(l => {
-    lifetimeById[l.deedId] = (lifetimeById[l.deedId] || 0) + (Number(l.points) || 0);
+  Object.values(logsState).forEach((day: any) => {
+    if (day && typeof day.points === 'number') {
+      lifetimeTotal += day.points;
+    }
+    if (day && day.items && Array.isArray(day.items)) {
+      day.items.forEach((item: any) => {
+        const id = item.id || item.name;
+        if (id) {
+          lifetimeById[id] = (lifetimeById[id] || 0) + (item.count || item.points || 1);
+        }
+      });
+    }
   });
 
+  const add = (itemOrPoints: any) => {
+    setLogsState((prev) => {
+      const dayData = prev[activeKey] || { points: 0, items: [] };
+      const newPoints = (dayData.points || 0) + (typeof itemOrPoints === 'number' ? itemOrPoints : (itemOrPoints?.points || 1));
+      const newItems = [...(dayData.items || []), itemOrPoints];
+      return {
+        ...prev,
+        [activeKey]: { ...dayData, points: newPoints, items: newItems }
+      };
+    });
+  };
+
+  const remove = (itemId: string) => {
+    setLogsState((prev) => {
+      const dayData = prev[activeKey];
+      if (!dayData || !dayData.items) return prev;
+      const newItems = dayData.items.filter((i: any) => i.id !== itemId && i.name !== itemId);
+      return {
+        ...prev,
+        [activeKey]: { ...dayData, items: newItems }
+      };
+    });
+  };
+
+  const refresh = () => {
+    setLogsState({ ...logsState });
+  };
+
   return {
-    log: store.logs,
-    today,
-    lifetimeTotal: store.totalPoints,
+    today: currentLog,
+    log: currentLog,
+    logs: logsState,
+    total: currentLog.points || 0,
+    lifetimeTotal,
     lifetimeById,
-    add: (deedId: string, points: number) => store.addPoint(points, deedId),
-    remove: (deedId: string, points: number) => store.removePoint(points, deedId),
-    refresh: () => {},
+    add,
+    remove,
+    refresh
   };
 }
 
-export function useLocalState<T>(_key: string, _fallback: T) {
-  const store = useStore();
-  return [store.totalPoints, store.addPoint] as const;
-}
+// 2. إصلاح useLocalState ليعمل كـ Generic Hook مرتبط بـ localStorage بالكامل
+export function useLocalState<T>(key: string, fallback: T): [T, (val: T | ((prev: T) => T)) => void] {
+  const [value, setValue] = useState<T>(() => {
+    try {
+      const item = localStorage.getItem(`heart_compass_${key}`);
+      return item !== null ? JSON.parse(item) : fallback;
+    } catch {
+      return fallback;
+    }
+  });
 
-export const LOCAL_WRITE_EVENT = "meezan:refresh";
-export const mergeState = (_state: any) => {};
-export const restoreAll = (_data: any) => {};
-export const snapshotAll = () => ({});
+  useEffect(() => {
+    try {
+      localStorage.setItem(`heart_compass_${key}`, JSON.stringify(value));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [key, value]);
+
+  return [value, setValue];
+}
