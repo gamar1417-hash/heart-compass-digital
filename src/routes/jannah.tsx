@@ -27,7 +27,7 @@ export default function Jannah() {
         </div>
 
         <div className="h-[500px] w-full rounded-xl overflow-hidden shadow-lg border-2 border-emerald-100 relative">
-          <Paradise totalPoints={lifetimeTotal} />
+          <Paradise Points={lifetimeTotal} />
         </div>
       </div>
     </div>
