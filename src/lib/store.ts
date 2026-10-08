@@ -1,4 +1,4 @@
-  import { useState, useEffect } from 'react';
+ import { useState, useEffect } from 'react';
 
 export const LOCAL_WRITE_EVENT = 'heart_compass_local_write';
 
@@ -109,11 +109,16 @@ export function useDayLog(dateKey?: string) {
 
       if (typeof itemOrPoints === 'number') {
         addVal = itemOrPoints;
-        itemObj = { points: itemOrPoints, id: Date.now().toString() };
+        itemObj = { id: Date.now().toString(), name: 'عمل خير', points: itemOrPoints };
       } else if (itemOrPoints && typeof itemOrPoints === 'object') {
         addVal = itemOrPoints.points || itemOrPoints.count || 1;
+        itemObj = {
+          id: itemOrPoints.id || Date.now().toString(),
+          name: itemOrPoints.name || itemOrPoints.title || 'عمل خير',
+          points: addVal
+        };
       } else {
-        itemObj = { name: String(itemOrPoints || 'action'), points: 1 };
+        itemObj = { id: Date.now().toString(), name: String(itemOrPoints || 'عمل خير'), points: 1 };
       }
       
       return {
