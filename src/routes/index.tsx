@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Btn, Card, Note, PageTitle } from "@/components/bits";
 import { useDayLog, useLocalState } from "@/lib/store";
 import { ayat, totalItems } from "@/data/content";
@@ -51,10 +51,7 @@ function Home() {
         <Card className="space-y-3">
           <h2 className="text-lg font-bold">تنبيه لطيف قبل البدء</h2>
           <p className="text-sm leading-relaxed text-muted-foreground">
-            انطلاقاً من معنى قوله تعالى: <b>«يا أيها الذين آمنوا عليكم أنفسكم»</b>، هذا التطبيق
-            للتذكير الذاتي. لا يحكم على أحد، ولا يحتسب ثواباً، ولا يقرّر مصيراً. كل ما تراه من
-            نقاط ورموز وبطاقات هو <b>تحفيز رمزي</b> يعينك على الاستمرار، والأجر والقبول عند الله
-            وحده.
+            ميزان الآخرة: سجل يومي نجمع فيه حصاد أفعالنا.. نقيّد فيه حسناتٍ نرجو بها جنات النعيم، ونسجل فيه سيئاتٍ ومزالق نخشى بها النار؛ ليكون هذا الجمع والتسجيل دافعاً حنوناً لمراجعة النفس، ومحو الزلات بصادق الاستغفار، فالله أرحم بنا، وباب التوبة دائمًا مفتوح لنعبر معاً إلى مراقي الفلاح والرضوان.
           </p>
           <Note>
             الأمانة والصدق في الإدخال: لا أحد يراقبك هنا، فاكتب ما هو حقّ عن نفسك برفق وبلا مبالغة
