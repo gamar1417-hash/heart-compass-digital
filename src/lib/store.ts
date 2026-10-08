@@ -1,15 +1,13 @@
  import { useState, useEffect } from 'react';
 
-// 1. إصلاح وتوسيع useDayLog ليعيد كافة الخصائص المتوافقة مع جميع الصفحات (deeds, quran, calendar, etc.)
 export function useDayLog(dateKey?: string) {
-  // استخدام تاريخ اليوم كافتراقي إذا لم يُحدد
   const todayKey = new Date().toISOString().split('T')[0];
   const activeKey = dateKey || todayKey;
 
   const [logsState, setLogsState] = useState<Record<string, any>>(() => {
     try {
       const saved = localStorage.getItem('heart_compass_logs');
-      return saved ? JSON.parse.parse(saved) : {}; // أو JSON.parse(saved)
+      return saved ? JSON.parse(saved) : {};
     } catch {
       return {};
     }
@@ -25,7 +23,6 @@ export function useDayLog(dateKey?: string) {
 
   const currentLog = logsState[activeKey] || { points: 0, items: [] };
 
-  // حساب المجموع الكلي والتاريخي
   let lifetimeTotal = 0;
   const lifetimeById: Record<string, number> = {};
   Object.values(logsState).forEach((day: any) => {
@@ -83,7 +80,6 @@ export function useDayLog(dateKey?: string) {
   };
 }
 
-// 2. إصلاح useLocalState ليعمل كـ Generic Hook مرتبط بـ localStorage بالكامل
 export function useLocalState<T>(key: string, fallback: T): [T, (val: T | ((prev: T) => T)) => void] {
   const [value, setValue] = useState<T>(() => {
     try {
