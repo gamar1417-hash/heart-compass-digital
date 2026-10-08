@@ -1,5 +1,57 @@
  import { useState, useEffect } from 'react';
 
+export const LOCAL_WRITE_EVENT = 'heart_compass_local_write';
+
+export function snapshotAll() {
+  try {
+    const data: Record<string, any> = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('heart_compass')) {
+        try {
+          data[key] = JSON.parse(localStorage.getItem(key) || '');
+        } catch {
+          data[key] = localStorage.getItem(key);
+        }
+      }
+    }
+    return data;
+  } catch {
+    return {};
+  }
+}
+
+export function restoreAll(snapshot: Record<string, any>) {
+  try {
+    if (!snapshot || typeof snapshot !== 'object') return;
+    Object.entries(snapshot).forEach(([key, value]) => {
+      if (key.startsWith('heart_compass')) {
+        localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+      }
+    });
+    window.dispatchEvent(new Event(LOCAL_WRITE_EVENT));
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export function mergeState(remoteData: Record<string, any>) {
+  try {
+    if (!remoteData || typeof remoteData !== 'object') return;
+    Object.entries(remoteData).forEach(([key, value]) => {
+      if (key.startsWith('heart_compass')) {
+        const localVal = localStorage.getItem(key);
+        if (!localVal) {
+          localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+        }
+      }
+    });
+    window.dispatchEvent(new Event(LOCAL_WRITE_EVENT));
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 export function useDayLog(dateKey?: string) {
   const todayKey = new Date().toISOString().split('T')[0];
   const activeKey = dateKey || todayKey;
@@ -82,12 +134,12 @@ export function useDayLog(dateKey?: string) {
   };
 
   return {
-    today: currentLog,
-    log: currentLog,
-    logs: logsState && typeof logsState === 'object' ? logsState : {},
-    total: currentLog.points,
-    lifetimeTotal,
-    lifetimeById,
+    today: currentLog || { points: 0, items: [] },
+    log: currentLog || { points: 0, items: [] },
+    logs: (logsState && typeof logsState === 'object') ? logsState : {},
+    total: currentLog?.points || 0,
+    lifetimeTotal: lifetimeTotal || 0,
+    lifetimeById: (lifetimeById && typeof lifetimeById === 'object') ? lifetimeById : {},
     add,
     remove,
     refresh
