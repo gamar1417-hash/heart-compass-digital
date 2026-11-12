@@ -113,14 +113,18 @@ export function Counter({
           ) : null}
         </div>
         <div className="flex shrink-0 items-center gap-2">
-          <button
-            aria-label={`إنقاص ${label}`}
-            onClick={() => onAdd(-1)}
-            className="size-9 rounded-full bg-secondary text-lg text-secondary-foreground"
-          >
-            −
-          </button>
-          <span className="w-10 text-center text-lg font-bold tabular-nums">{value}</span>
+          {value > 0 ? (
+            <>
+              <button
+                aria-label={`إنقاص ${label}`}
+                onClick={() => onAdd(-1)}
+                className="size-9 rounded-full bg-secondary text-lg text-secondary-foreground"
+              >
+                −
+              </button>
+              <span className="w-10 text-center text-lg font-bold tabular-nums">{value}</span>
+            </>
+          ) : null}
           <button
             aria-label={`زيادة ${label}`}
             onClick={() => onAdd(1)}

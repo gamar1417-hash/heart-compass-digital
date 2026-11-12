@@ -7,3 +7,4 @@
 - [x] Expand Quran tracking to verses, pages, and words with manual entry.
 - [x] Connect all new private counters to the cumulative Paradise scene.
 - [x] Add illness, worry, sadness, and pain counters with gentle doctrinal wording.
+- [x] Let today's entries be decremented safely, and make the Paradise scene read the cumulative total by default.

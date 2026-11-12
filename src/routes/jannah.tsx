@@ -1,7 +1,7 @@
  import React from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { useDayLog } from '../lib/store';
-import Paradise from '../components/paradise';
+import { ParadiseScene } from "@/components/paradise";
 
 export const Route = createFileRoute('/jannah')({
   component: Jannah,
@@ -27,7 +27,7 @@ export default function Jannah() {
         </div>
 
         <div className="h-[500px] w-full rounded-xl overflow-hidden shadow-lg border-2 border-emerald-100 relative">
-          <Paradise Points={lifetimeTotal} />
+          <ParadiseScene />
         </div>
       </div>
     </div>
